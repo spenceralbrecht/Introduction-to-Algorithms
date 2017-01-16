@@ -39,7 +39,7 @@ class List {
 
    // Fields
    private int length;
-   private int cursorIndex;
+   private int index;
    private Node front;
    private Node back;
    private Node cursor;
@@ -47,7 +47,7 @@ class List {
    // Constructor
    List() {    // Creates a new empty list
       length = 0;
-      cursorIndex = -1;
+      index = -1;
       front = back = cursor = null;
    }
    // Access functions
@@ -59,7 +59,7 @@ class List {
    // otherwise returns -1.
    int index() {
       if (cursor!=null) {
-         return cursorIndex;
+         return index;
       } else {
          return -1;
       }
@@ -82,7 +82,7 @@ class List {
    }
    // Returns cursor element. Pre: length()>0, index()>=0
    int get() {
-      if (length>0 && cursorIndex>=0) {
+      if (length>0 && index>=0) {
          return cursor.data;
       }
       else {
@@ -110,21 +110,21 @@ class List {
    // Resets this List to its original empty state.
    void clear() {
       front = back = cursor = null;
-      cursorIndex = -1;
+      index = -1;
       length = 0;
    }
    // If List is non-empty, places the cursor under the front element,
    // otherwise does nothing.
    void moveFront() {
       if (length>0) {
-         cursorIndex = 0;
+         index = 0;
       }
    }
    // If List is non-empty, places the cursor under the back element,
    // otherwise does nothing.
    void moveBack() {
       if (length>0) {
-         cursorIndex = length-1;
+         index = length-1;
       }
    }
    // If cursor is defined and not at front, moves cursor one step toward
@@ -132,12 +132,12 @@ class List {
    // undefined, if cursor is undefined does nothing.
    void movePrev() {
       if (cursor!=null) {
-         if (cursorIndex!=0) {
-            cursorIndex--;
+         if (index!=0) {
+            index--;
          }
          else {
             cursor = null;
-            cursorIndex = -1;
+            index = -1;
          }
       }
    }
@@ -146,12 +146,12 @@ class List {
    // undefined, if cursor is undefined does nothing.
    void moveNext() {
       if (cursor!=null) {
-         if (cursorIndex!=length-1) {
-            cursorIndex++;
+         if (index!=length-1) {
+            index++;
          }
          else {
             cursor = null;
-            cursorIndex = -1;
+            index = -1;
          }
       }
    }
@@ -185,14 +185,14 @@ class List {
    // Insert new element before cursor.
    // Pre: length()>0, index()>=0
    void insertBefore(int data) {
-      if (cursor!=null && length>cursorIndex) {
+      if (cursor!=null && length>index) {
          Node temp = new Node(data);
          Node tracer = front;
          // Jump to correct position
-         for (int i = 0; i < cursorIndex; i++) {
+         for (int i = 0; i < index; i++) {
             tracer = tracer.next;
          }
-         if (cursorIndex == 0) {
+         if (index == 0) {
             temp.next = front;
             front = temp;
          }
@@ -211,14 +211,14 @@ class List {
    // Inserts new element after cursor.
    // Pre: length()>0, index()>=0
    void insertAfter(int data) {
-      if (cursor!=null && length>cursorIndex) {
+      if (cursor!=null && length>index) {
          Node temp = new Node(data);
          Node tracer = front;
          // Jump to correct position
-         for (int i = 0; i < cursorIndex; i++) {
+         for (int i = 0; i < index; i++) {
             tracer = tracer.next;
          }
-         if (cursorIndex == length-1) {
+         if (index == length-1) {
             temp.last = back;
             back = temp;
          }
@@ -251,9 +251,9 @@ class List {
    // Deletes cursor element, making cursor undefined.
    // Pre: length()>0, index()>=0
    void delete() {
-      if (length>0 && cursorIndex>=0) {
+      if (length>0 && index>=0) {
          cursor = null;
-         cursorIndex = -1;
+         index = -1;
       }
    }
 
