@@ -136,6 +136,7 @@ class List {
       if (cursor!=null) {
          if (index!=0) {
             index--;
+            cursor = cursor.last;
          }
          else {
             cursor = null;
@@ -150,6 +151,7 @@ class List {
       if (cursor!=null) {
          if (index!=length-1) {
             index++;
+            cursor = cursor.next;
          }
          else {
             cursor = null;
