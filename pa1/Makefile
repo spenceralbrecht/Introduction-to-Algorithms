@@ -1,15 +1,32 @@
-# Spencer Albrecht
-# salbrech
-# PA1
-# Makefile for PA1
-List: List.class
-	echo Main-class: List > Manifest
-	jar cvfm List Manifest List.class
+#------------------------------------------------------------------------------
+#  Spencer Albrecht
+#  salbrech
+#  Makefile for CMPS 101 pa1
+#  Compiles all .java files in the current directory and creates an executable
+#  jar file called Lex.  See the following for a short description of makefiles
+#
+#       https://classes.soe.ucsc.edu/cmps012b/Summer15/lab1.pdf
+#
+#------------------------------------------------------------------------------
+
+MAINCLASS  = ListClient
+JAVAC      = javac
+JAVASRC    = $(wildcard *.java)
+SOURCES    = $(JAVASRC) makefile README
+CLASSES    = $(patsubst %.java, %.class, $(JAVASRC))
+JARCLASSES = $(patsubst %.class, %*.class, $(CLASSES))
+JARFILE    = $(MAINCLASS)
+
+all: $(JARFILE)
+
+$(JARFILE): $(CLASSES)
+	echo Main-class: $(MAINCLASS) > Manifest
+	jar cvfm $(JARFILE) Manifest $(JARCLASSES)
+	chmod +x $(JARFILE)
 	rm Manifest
-	chmod +x List
-List.class: List.java
-	javac -Xlint List.java
+
+%.class: %.java
+	$(JAVAC) $<
+
 clean:
-	rm -f List List.class
-submit: README Makefile List.java
-	submit cmps101-pt.u17 pa1 README Makefile List.java
+	rm -f *.class $(JARFILE)
