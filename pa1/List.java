@@ -177,6 +177,7 @@ class List {
       }
       else {
          temp.last = back;
+         back.next = temp;
          back = temp;
       }
       length++;
