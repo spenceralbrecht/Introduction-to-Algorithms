@@ -1,0 +1,8 @@
+Files submitted for Programming Assignment 1.
+
+List.java - Provides a list ADT for use by Lex.java.
+
+Lex.java - Uses the list ADT provided by List.java to
+sort the lines of a file in alphabetical order.
+
+Submitted by Spencer Albrecht (salbrech@ucsc.edu)
