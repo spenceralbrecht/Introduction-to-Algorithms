@@ -134,15 +134,19 @@ class List {
    // undefined, if cursor is undefined does nothing.
    void movePrev() {
       if (cursor!=null) {
+         //System.out.println("137");
          if (index>0) {
-            index--;
+            //System.out.println("139");
             cursor = cursor.last;
+            index--;
          }
          else {
+            //System.out.println("144");
             cursor = null;
             index = -1;
          }
       }
+      //System.out.println("149");
    }
    // If cursor is defined and not at back, moves cursor one step toward
    // back of this List, if cursor is defined and at back, cursor becomes
@@ -168,15 +172,17 @@ class List {
       }
       else {
          temp.next = front;
+         front.last = temp;
          front = temp;
       }
       length++;
+      index++;
    }
    // Insert new element into this List. If List is non-empty,
    // insertion takes place after back element.
    void append(int data) {
       Node temp = new Node(data);
-      if (length==0) {
+      if (length<1) {
          front = back = temp;
       }
       else {
@@ -192,15 +198,17 @@ class List {
       if (cursor!=null && length>index) {
          Node temp = new Node(data);
          Node tracer = front;
-         // Jump to correct position
-         for (int i = 0; i < index; i++) {
-            tracer = tracer.next;
-         }
+         // If inserting before the first element
          if (index == 0) {
             temp.next = front;
+            front.last = temp;
             front = temp;
          }
          else {
+            // Jump to correct position
+            for (int i = 0; i < index; i++) {
+               tracer = tracer.next;
+            }
             // Set up correct links for Node
             // to be inserted
             temp.last = tracer.last;
@@ -210,6 +218,8 @@ class List {
             temp.last.next = temp;
             temp.next.last = temp;
          }
+         index++;
+         length++;
       }
    }
    // Inserts new element after cursor.
@@ -224,6 +234,7 @@ class List {
          }
          if (index == length-1) {
             temp.last = back;
+            back.next = temp;
             back = temp;
          }
          else {
@@ -233,9 +244,10 @@ class List {
             temp.next = tracer.next;
             // Set up correct links in current
             // list to add new Node
-            temp.last.next = temp;
-            temp.next.last = temp;
+            tracer.next.last = temp;
+            tracer.next = temp;
          }
+         length++;
       }
    }
    // Deletes the front element. Pre: length()>0
@@ -243,6 +255,8 @@ class List {
       if (length>0) {
          front = front.next;
          front.last = null;
+         length--;
+         index--;
       }
    }
    // Deletes the back element. Pre: length()>0
@@ -250,6 +264,7 @@ class List {
       if (length>0) {
          back = back.last;
          back.next = null;
+         length--;
       }
    }
    // Deletes cursor element, making cursor undefined.
@@ -258,6 +273,7 @@ class List {
       if (length>0 && index>=0) {
          cursor = null;
          index = -1;
+         length--;
       }
    }
 

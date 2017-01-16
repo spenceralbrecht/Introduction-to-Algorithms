@@ -32,6 +32,7 @@ public class ListClient{
 
       A.moveFront();
       for(int i=0; i<5; i++) A.moveNext(); // at index 5
+      //System.out.println("index: "+A.index());
       A.insertBefore(-1);                  // at index 6
       for(int i=0; i<9; i++) A.moveNext(); // at index 15
       A.insertAfter(-2);
