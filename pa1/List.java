@@ -118,6 +118,7 @@ class List {
    void moveFront() {
       if (length>0) {
          index = 0;
+         cursor = front;
       }
    }
    // If List is non-empty, places the cursor under the back element,
@@ -125,6 +126,7 @@ class List {
    void moveBack() {
       if (length>0) {
          index = length-1;
+         cursor = back;
       }
    }
    // If cursor is defined and not at front, moves cursor one step toward
