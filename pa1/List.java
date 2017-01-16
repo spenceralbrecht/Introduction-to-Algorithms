@@ -174,9 +174,12 @@ class List {
          temp.next = front;
          front.last = temp;
          front = temp;
+         if (index!=-1) {
+             index++;
+         }
       }
       length++;
-      index++;
+
    }
    // Insert new element into this List. If List is non-empty,
    // insertion takes place after back element.
@@ -256,7 +259,15 @@ class List {
          front = front.next;
          front.last = null;
          length--;
-         index--;
+         // Deletes the cursor if it was the front
+         // element
+         if (index!=-1) {
+             if (index==0) {
+                 cursor = null;
+                 index = -1;
+             }
+             index--;
+         }
       }
    }
    // Deletes the back element. Pre: length()>0
@@ -265,6 +276,12 @@ class List {
          back = back.last;
          back.next = null;
          length--;
+         // Delete the cursor if it was the last
+         // element
+         if (index == length-1) {
+             cursor = null;
+             index = -1;
+         }
       }
    }
    // Deletes cursor element, making cursor undefined.

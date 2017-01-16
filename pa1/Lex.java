@@ -39,20 +39,28 @@ class Lex {
         }
 
         List tempList = new List();
-        tempList.moveFront();
         for (int i = 0; i < lineNumber; i++) {
             if (i==0) {
+                // Add the first element and put the cursor on it
                 tempList.prepend(i);
+                tempList.moveFront();
             }
             else {
                 int j = i-1;
                 // If it comes before fileLines[i-1]
-                while(fileLines[i].compareTo(fileLines[j])<0 && j>0) {
+                while(j>= 0 && fileLines[i].compareTo(fileLines[j])<0) {
                     j--;
                     tempList.movePrev();
                 }
-                tempList.insertAfter(i);
+                if (j==-1) {
+                    tempList.prepend(i);
+                }
+                else {
+                    tempList.insertAfter(i);
+                }
+                tempList.moveNext();
             }
+
         }
 
 
