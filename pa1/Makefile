@@ -9,7 +9,7 @@
 #
 #------------------------------------------------------------------------------
 
-MAINCLASS  = ListClient
+MAINCLASS  = Lex
 JAVAC      = javac
 JAVASRC    = $(wildcard *.java)
 SOURCES    = $(JAVASRC) makefile README
