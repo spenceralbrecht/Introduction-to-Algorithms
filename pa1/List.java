@@ -134,7 +134,7 @@ class List {
    // undefined, if cursor is undefined does nothing.
    void movePrev() {
       if (cursor!=null) {
-         if (index!=0) {
+         if (index>0) {
             index--;
             cursor = cursor.last;
          }
