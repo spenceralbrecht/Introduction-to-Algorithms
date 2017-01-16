@@ -1,9 +1,9 @@
 //-----------------------------------------------------------------------------
+// Spencer Albrecht
+// salbrech
+// PA1
 // List.java
 // An integer list ADT
-// PA1
-// Spencer Albrecht
-// salbrech@ucsc.edu
 //-----------------------------------------------------------------------------
 
 class List {
@@ -39,13 +39,15 @@ class List {
 
    // Fields
    private int length;
-   private int cursor;
+   private int cursorIndex;
    private Node front;
    private Node back;
+   private Node cursor;
 
    // Constructor
    List() {    // Creates a new empty list
       length = 0;
+      cursorIndex = -1;
       front = back = cursor = null;
    }
    // Access functions
@@ -56,8 +58,8 @@ class List {
    // If cursor is defined, returns the index of the cursor element,
    // otherwise returns -1.
    int index() {
-      if (cursor) {
-         return cursor;
+      if (cursor!=null) {
+         return cursorIndex;
       } else {
          return -1;
       }
@@ -65,7 +67,7 @@ class List {
    // Returns front element. Pre: length()>0
    int front() {
       if (length>0) {
-         return front;
+         return front.data;
       } else {
          return -1;
       }
@@ -73,15 +75,18 @@ class List {
    // Returns back element. Pre: length()>0
    int back() {
       if (length>0) {
-         return back;
+         return back.data;
       } else {
          return -1;
       }
    }
    // Returns cursor element. Pre: length()>0, index()>=0
    int get() {
-      if (length>0 && cursor>=0) {
-         return cursor;
+      if (length>0 && cursorIndex>=0) {
+         return cursor.data;
+      }
+      else {
+         return -1;
       }
    }
    // Returns true if this List and L are the same integer
@@ -89,7 +94,7 @@ class List {
    boolean equals(List L) {
       Node tracerA = front;
       Node tracerB = L.front;
-      while (tracerA) {
+      while (tracerA!=null) {
          if (tracerA.data==tracerB.data) {
             tracerA = tracerA.next;
             tracerB = tracerB.next;
@@ -104,33 +109,35 @@ class List {
    // Manipulation procedures
    // Resets this List to its original empty state.
    void clear() {
-      front = back = null;
+      front = back = cursor = null;
+      cursorIndex = -1;
       length = 0;
    }
    // If List is non-empty, places the cursor under the front element,
    // otherwise does nothing.
    void moveFront() {
       if (length>0) {
-         cursor = 0;
+         cursorIndex = 0;
       }
    }
    // If List is non-empty, places the cursor under the back element,
    // otherwise does nothing.
    void moveBack() {
       if (length>0) {
-         cursor = length-1;
+         cursorIndex = length-1;
       }
    }
    // If cursor is defined and not at front, moves cursor one step toward
    // front of this List, if cursor is defined and at front, cursor becomes
    // undefined, if cursor is undefined does nothing.
    void movePrev() {
-      if (cursor) {
-         if (cursor!=0) {
-            cursor--;
+      if (cursor!=null) {
+         if (cursorIndex!=0) {
+            cursorIndex--;
          }
          else {
             cursor = null;
+            cursorIndex = -1;
          }
       }
    }
@@ -138,12 +145,13 @@ class List {
    // back of this List, if cursor is defined and at back, cursor becomes
    // undefined, if cursor is undefined does nothing.
    void moveNext() {
-      if (cursor) {
-         if (cursor!=length-1) {
-            cursor++;
+      if (cursor!=null) {
+         if (cursorIndex!=length-1) {
+            cursorIndex++;
          }
          else {
             cursor = null;
+            cursorIndex = -1;
          }
       }
    }
@@ -176,14 +184,14 @@ class List {
    // Insert new element before cursor.
    // Pre: length()>0, index()>=0
    void insertBefore(int data) {
-      if (cursor && length>cursor) {
+      if (cursor!=null && length>cursorIndex) {
          Node temp = new Node(data);
          Node tracer = front;
          // Jump to correct position
-         for (int i = 0; i < cursor; i++) {
+         for (int i = 0; i < cursorIndex; i++) {
             tracer = tracer.next;
          }
-         if (cursor == 0) {
+         if (cursorIndex == 0) {
             temp.next = front;
             front = temp;
          }
@@ -202,14 +210,14 @@ class List {
    // Inserts new element after cursor.
    // Pre: length()>0, index()>=0
    void insertAfter(int data) {
-      if (cursor && length>cursor) {
+      if (cursor!=null && length>cursorIndex) {
          Node temp = new Node(data);
          Node tracer = front;
          // Jump to correct position
-         for (int i = 0; i < cursor; i++) {
+         for (int i = 0; i < cursorIndex; i++) {
             tracer = tracer.next;
          }
-         if (cursor == length-1) {
+         if (cursorIndex == length-1) {
             temp.last = back;
             back = temp;
          }
@@ -242,8 +250,9 @@ class List {
    // Deletes cursor element, making cursor undefined.
    // Pre: length()>0, index()>=0
    void delete() {
-      if (length>0 && cursor>=0) {
+      if (length>0 && cursorIndex>=0) {
          cursor = null;
+         cursorIndex = -1;
       }
    }
 
@@ -252,11 +261,13 @@ class List {
    // representation of this List consisting of a space
    // separated sequence of integers, with front on left.
    public String toString() {
-      Node temp = front;
-      while(tracer) {
-         System.out.println(tracer.data+" ");
+      Node tracer = front;
+      String temp = "";
+      while(tracer!=null) {
+         temp+=tracer.data+" ";
          tracer = tracer.next;
       }
+      return temp;
    }
    // Returns a new List representing the same integer sequence as this
    // List. The cursor in the new list is undefined, regardless of the
@@ -264,11 +275,12 @@ class List {
    List copy() {
       List newList = new List();
       Node tracer = front;
-      while (tracer) {
+      while (tracer!=null) {
          Node temp = new Node(tracer.data);
-         newList.append(temp);
+         newList.append(temp.data);
          tracer = tracer.next;
       }
+      return newList;
    }
    // Returns a new List which is the concatenation of
    // this list followed by L. The cursor in the new List
