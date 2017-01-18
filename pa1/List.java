@@ -6,7 +6,7 @@
 // An integer list ADT
 //-----------------------------------------------------------------------------
 
-class List {
+class List throws RuntimeException {
    private class Node{
       // Fields
       int data;
@@ -69,6 +69,7 @@ class List {
       if (length>0) {
          return front.data;
       } else {
+         // throw new RuntimeException("Length must be greater than 0 in front() in List.java")
          return -1;
       }
    }
@@ -77,6 +78,7 @@ class List {
       if (length>0) {
          return back.data;
       } else {
+         // throw new RuntimeException("Length must be greater than 0 in back() in List.java")
          return -1;
       }
    }
@@ -85,8 +87,13 @@ class List {
       if (length>0 && index>=0) {
          return cursor.data;
       }
-      else {
+      else if (length<=0) {
+         // throw new RuntimeException("Length must be greater than 0 in get() in List.java")
          return -1;
+      }
+      else {
+          // throw new RuntimeException("Index must be greater than 0 in get() in List.java")
+          return -1;
       }
    }
    // Returns true if this List and L are the same integer
@@ -224,6 +231,12 @@ class List {
          index++;
          length++;
       }
+      else if (length>0) {
+          // throw new RuntimeException("Cursor must be defined in insertBefore() in List.java")
+      }
+      else {
+          // throw new RuntimeException("Length must be greater than 0 in insertBefore() in List.java")
+      }
    }
    // Inserts new element after cursor.
    // Pre: length()>0, index()>=0
@@ -252,6 +265,12 @@ class List {
          }
          length++;
       }
+      else if (length>0) {
+          // throw new RuntimeException("Cursor must be defined in insertAfter() in List.java")
+      }
+      else {
+          // throw new RuntimeException("Length must be greater than 0 in insertAfter() in List.java")
+      }
    }
    // Deletes the front element. Pre: length()>0
    void deleteFront() {
@@ -269,6 +288,9 @@ class List {
              index--;
          }
       }
+      else {
+          // throw new RuntimeException("length must be greater than 0 in deleteFront in List.java")
+      }
    }
    // Deletes the back element. Pre: length()>0
    void deleteBack() {
@@ -283,6 +305,9 @@ class List {
              index = -1;
          }
       }
+      else {
+          // throw new RuntimeException("length must be greater than 0 in deleteBack() in List.java")
+      }
    }
    // Deletes cursor element, making cursor undefined.
    // Pre: length()>0, index()>=0
@@ -291,6 +316,12 @@ class List {
          cursor = null;
          index = -1;
          length--;
+      }
+      else if (length>0) {
+          // throw new RuntimeException("Cursor must be defined in insertBefore() in List.java")
+      }
+      else {
+          // throw new RuntimeException("Length must be greater than 0 in insertBefore() in List.java")
       }
    }
 

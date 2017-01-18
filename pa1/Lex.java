@@ -1,3 +1,11 @@
+//-----------------------------------------------------------------------------
+// Spencer Albrecht
+// salbrech
+// PA1
+// Lex.java
+// Sort words in files alphabetically
+//-----------------------------------------------------------------------------
+
 import java.io.*;
 import java.util.Scanner;
 class Lex {
@@ -62,9 +70,6 @@ class Lex {
             }
 
         }
-
-
-
 
         // Prints the correct output to the file
         tempList.moveFront();
