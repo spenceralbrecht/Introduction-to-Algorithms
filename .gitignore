@@ -1,5 +1,5 @@
 *.class 
+*.txt
 ListClient 
 Lex
-input
-output
+

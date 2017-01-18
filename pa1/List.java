@@ -6,7 +6,7 @@
 // An integer list ADT
 //-----------------------------------------------------------------------------
 
-class List throws RuntimeException {
+class List {
    private class Node{
       // Fields
       int data;
@@ -205,7 +205,7 @@ class List throws RuntimeException {
    // Insert new element before cursor.
    // Pre: length()>0, index()>=0
    void insertBefore(int data) {
-      if (cursor!=null && length>index) {
+      if (cursor!=null && length>0 && index>=0) {
          Node temp = new Node(data);
          Node tracer = front;
          // If inserting before the first element
@@ -241,7 +241,9 @@ class List throws RuntimeException {
    // Inserts new element after cursor.
    // Pre: length()>0, index()>=0
    void insertAfter(int data) {
-      if (cursor!=null && length>index) {
+      //System.out.println("length = "+length);
+      //System.out.println("index = "+index);
+      if (cursor!=null && length>0 && index>=0) {
          Node temp = new Node(data);
          Node tracer = front;
          // Jump to correct position

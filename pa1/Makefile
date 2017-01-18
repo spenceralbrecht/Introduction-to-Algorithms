@@ -30,3 +30,9 @@ $(JARFILE): $(CLASSES)
 
 clean:
 	rm -f *.class $(JARFILE)
+
+submit:
+	submit cmps101-pt.w17 pa1 List.java Lex.java ListClient.java Makefile README
+
+check:
+	ls /afs/cats.ucsc.edu/class/cmps101-pt.w17/pa1/salbrech
