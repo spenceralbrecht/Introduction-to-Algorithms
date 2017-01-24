@@ -299,6 +299,8 @@ class List {
         if (index<0) {
             throw new RuntimeException("Cursor must be defined in delete() in List.java");
         }
+        cursor.last.next = cursor.next;
+        cursor.next.last = cursor.last;
         cursor = null;
         index = -1;
         length--;
