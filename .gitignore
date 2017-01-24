@@ -1,5 +1,6 @@
 *.class 
 *.txt
+*.o
 ListClient 
 Lex
 
