@@ -7,11 +7,14 @@
 //-----------------------------------------------------------------------------
 #include<stdio.h>
 #include<stdlib.h>
+//#include<string.h>
 #include"List.h"
+
 //#include<string.h>
 #define MAX_LEN 160
 
 int strcmp(const char *s1, const char *s2);
+//char* strcpy(char* dst, char* src);
 
 int main(int argc, char* argv[]){
 
@@ -31,9 +34,7 @@ int main(int argc, char* argv[]){
 
     FILE *infile, *outfile;
     char *stringList[MAX_LEN];
-    char* line = NULL;
-    size_t len = 0;
-    int length;
+    char line[MAX_LEN];
     int counter = 0;
     int x = 0;
 
@@ -52,16 +53,24 @@ int main(int argc, char* argv[]){
     }
 
     // Reads in the lines of the file to the string array
-    while ((length = getline(&line, &len, infile)) != -1) {
-        stringList[counter] = line;
-        printf("%s", line);
+    //while ((length = getline(&line, &bufferLength, infile)) != -1) {
+    while (fgets(line, sizeof(line), infile)) {
+        //strcpy(stringList[counter], line);
+        //stringList[counter] = &line;
+        stringList[counter] = calloc(strlen(line)+1, 1);
+        strcpy(stringList[counter], line);
+        //printf("%s", line);
+        //printf("%d\n", counter);
+        //printf("%s", stringList[counter]);
         counter++;
     }
 
-    //fclose(infile);
-    if (line) {
-        free(line);
-    }
+
+    //printf("counter = %d\n", counter);
+
+    // for(int i = 0; i < counter; i++) {
+    //     printf("%s\n", stringList[i]);
+    // }
 
     //-------------------------------
 
@@ -81,10 +90,10 @@ int main(int argc, char* argv[]){
     //     fprintf(out, "line %d contains %d token%s: \n", count, n, n==1?"":"s");
     //     fprintf(out, "%s\n", tokenlist);
     // }
-    //
-    //
-    //
-    // Correctly insert indices into tempList
+
+
+
+    //Correctly insert indices into tempList
     List tempList = newList();
     for (int i = 0; i < counter; i++) {
         // Add the first element to the list without any
@@ -118,7 +127,7 @@ int main(int argc, char* argv[]){
         }
 
     }
-    printList(stdout,tempList);
+    //printList(stdout,tempList);
 
     // Prints the correct output to the file based on the list
     moveFront(tempList);
@@ -126,7 +135,7 @@ int main(int argc, char* argv[]){
         x = get(tempList);
         // Prints the correct array element
         // based on the sorted List
-        fprintf(outfile, "%s\n", stringList[x]);
+        fprintf(outfile, "%s", stringList[x]);
         moveNext(tempList);
     }
 
@@ -139,19 +148,18 @@ int main(int argc, char* argv[]){
     return(0);
 }
 
-int strcmp(const char *s1, const char *s2)
-
-{
+int strcmp(const char *s1, const char *s2) {
   int ret = 0;
-
   while (!(ret = *(unsigned char *) s1 - *(unsigned char *) s2) && *s2) ++s1, ++s2;
-
   if (ret < 0)
-
     ret = -1;
   else if (ret > 0)
-
     ret = 1 ;
-
   return ret;
 }
+
+// char* strcpy(char* dst, char* src) {
+//    char* ret;
+//    for(ret= dst; *dst++= *src++; );
+//    return ret;
+// }
