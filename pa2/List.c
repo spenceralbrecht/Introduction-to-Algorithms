@@ -109,7 +109,7 @@ void clear(List L) {
         deleteFront(L);
         // printf("Length = %d\n",L->length);
     }
-    L->front = L->back = NULL;
+    L->front = L->back = L->cursor = NULL;
 }
 // If List is non-empty, places the cursor under the front element,
 // otherwise does nothing.
