@@ -65,34 +65,6 @@ int main(int argc, char* argv[]){
         counter++;
     }
 
-
-    //printf("counter = %d\n", counter);
-
-    // for(int i = 0; i < counter; i++) {
-    //     printf("%s\n", stringList[i]);
-    // }
-
-    //-------------------------------
-
-    // /* read each line of input file, then count and print tokens */
-    // while( fgets(line, MAX_LEN, in) != NULL)  {
-    //     count++;
-    //     n = 0;
-    //     token = strtok(line, " \n");
-    //     tokenlist[0] = '\0';
-    //     while( token!=NULL ){
-    //         strcat(tokenlist, "   ");
-    //         strcat(tokenlist, token);
-    //         strcat(tokenlist, "\n");
-    //         n++;
-    //         token = strtok(NULL, " \n");
-    //     }
-    //     fprintf(out, "line %d contains %d token%s: \n", count, n, n==1?"":"s");
-    //     fprintf(out, "%s\n", tokenlist);
-    // }
-
-
-
     //Correctly insert indices into tempList
     List tempList = newList();
     for (int i = 0; i < counter; i++) {
@@ -157,9 +129,3 @@ int strcmp(const char *s1, const char *s2) {
     ret = 1 ;
   return ret;
 }
-
-// char* strcpy(char* dst, char* src) {
-//    char* ret;
-//    for(ret= dst; *dst++= *src++; );
-//    return ret;
-// }
