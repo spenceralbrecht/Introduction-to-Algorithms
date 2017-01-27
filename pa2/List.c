@@ -62,9 +62,7 @@ void freeList(List* pL) {
     if(pL!=NULL && *pL!=NULL){
         /* free all heap memory associated with *pL */
         clear(*pL);
-        *pL->front = NULL;
-        *pL->back = NULL;
-        *pL->cursor = NULL;
+        free(*pL);
         *pL = NULL;
     }
 }
@@ -115,7 +113,6 @@ void clear(List L) {
         deleteFront(L);
         // printf("Length = %d\n",L->length);
     }
-    L->front = L->back = L->cursor NULL;
 }
 // If List is non-empty, places the cursor under the front element,
 // otherwise does nothing.
@@ -201,12 +198,12 @@ void append(List L, int data) {
 // Insert new element before cursor.
 // Pre: length()>0, index()>=0
 void insertBefore(List L, int data) {
-    if (length<1) {
+    if (L->length<1) {
         fprintf(stderr,
         "insertBefore() cannot be called on empty List\n");
         exit(EXIT_FAILURE);
     }
-    if (cursorIndex<0) {
+    if (L->cursorIndex<0) {
         fprintf(stderr,
         "insertBefore() cannot be called on when the cursor is not defined\n");
         exit(EXIT_FAILURE);
@@ -237,12 +234,12 @@ void insertBefore(List L, int data) {
 // Inserts new element after cursor.
 // Pre: length()>0, index()>=0
 void insertAfter(List L, int data) {
-    if (length<1) {
+    if (L->length<1) {
         fprintf(stderr,
         "insertAfter() cannot be called on empty List\n");
         exit(EXIT_FAILURE);
     }
-    if (cursorIndex<0) {
+    if (L->cursorIndex<0) {
         fprintf(stderr,
         "insertAfter() cannot be called on when the cursor is not defined\n");
         exit(EXIT_FAILURE);
@@ -276,22 +273,30 @@ void deleteFront(List L) {
         "deleteFront() cannot be called on empty List\n");
         exit(EXIT_FAILURE);
     }
-    Node temp = L->front;
-    L->front = L->front->next;
-    temp->next = NULL;
-    temp->last = NULL;
-    freeNode(&temp);
-    //printf("%d ",L->length);
-    //front.last = null;
-    L->length--;
+    if (L->length==1) {
+    	if (L->front!=NULL) {
+            free(L->front);
+        }
+    } 
+    else {
+    	Node temp = L->front;
+    	L->front = L->front->next;
+    	L->front->last = NULL;
+    	if (temp!=NULL) {
+	    freeNode(&temp);
+    	}
+    }
     // Deletes the cursor if it was the front element
     if (L->cursorIndex!=-1) {
         if (L->cursorIndex==0) {
             L->cursor = NULL;
             L->cursorIndex = -1;
         }
-        L->cursorIndex--;
+	else {
+            L->cursorIndex--;
+        }
     }
+    L->length--;
 }
 // Deletes the back element. Pre: length()>0
 void deleteBack(List L) {
@@ -300,35 +305,51 @@ void deleteBack(List L) {
         "deleteBack() cannot be called on empty List\n");
         exit(EXIT_FAILURE);
     }
-    Node temp = L->back;
-    L->back = L->back->last;
-    temp->next = NULL;
-    temp->last = NULL;
-    freeNode(&temp);
-    //back.next = null;
-    L->length--;
+    if (L->length==1) {
+	if(L->back!=NULL) {
+	    free(L->back);
+ 	}
+    }
+    else {
+    	Node temp = L->back;
+   	L->back = L->back->last;
+    	L->back->next = NULL;
+    	if (temp!=NULL) {
+	    freeNode(&temp);
+    	}
+    }		
     // Delete the cursor if it was the last element
     if (L->cursorIndex == L->length-1) {
         L->cursor = NULL;
         L->cursorIndex = -1;
     }
+    L->length--;
 }
 // Deletes cursor element, making cursor undefined.
 // Pre: length()>0, index()>=0
 void delete(List L) {
-    if (length<1) {
+    if (L->length<1) {
         fprintf(stderr,
         "delete() cannot be called on empty List\n");
         exit(EXIT_FAILURE);
     }
-    if (cursorIndex<0) {
+    if (L->cursorIndex<0) {
         fprintf(stderr,
         "delete() cannot be called on when the cursor is not defined\n");
         exit(EXIT_FAILURE);
     }
-    L->cursor->last->next = L->cursor->next;
-    L->cursor->next->last = L->cursor->last;
-    freeNode(&L->cursor);
+    if (L->length==1) {
+	if (L->cursor!=NULL) {
+	    free(&L->cursor);
+        }
+    }
+    else {
+    	L->cursor->last->next = L->cursor->next;
+    	L->cursor->next->last = L->cursor->last;
+    	if (L->cursor!=NULL) {
+		freeNode(&L->cursor);
+    	}
+    }
     L->cursor = NULL;
     L->cursorIndex = -1;
     L->length--;

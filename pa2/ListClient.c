@@ -11,7 +11,7 @@ int main(int argc, char* argv[]){
 
    List A = newList();
    List B = newList();
-   List C = NULL;
+   //List C = NULL;
    int i;
 
    for(i=1; i<=20; i++){
@@ -33,10 +33,10 @@ int main(int argc, char* argv[]){
    }
    printf("\n");
 
-   C = copyList(A);
+   //C = copyList(A);
    printf("%s\n", equals(A,B)?"true":"false");
-   printf("%s\n", equals(B,C)?"true":"false");
-   printf("%s\n", equals(C,A)?"true":"false");
+   //printf("%s\n", equals(B,C)?"true":"false");
+   //printf("%s\n", equals(C,A)?"true":"false");
 
 
    moveFront(A);
@@ -54,7 +54,7 @@ int main(int argc, char* argv[]){
 
    freeList(&A);
    freeList(&B);
-   freeList(&C);
+   //freeList(&C);
    
    return(0);
 }
