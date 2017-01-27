@@ -1,1 +1,11 @@
-This is the README for PA2 for CS101
+Files submitted for Programming Assignment 2.
+
+List.c - Provides List ADT as well as private node class
+
+List.h - Header file that specifies which functions are accessible to client
+
+Lex.c - Sorts the lines of a file in alphabetical order
+
+Makefile - Compiles and links all files
+
+ListClient - A test for the List ADT provided to us

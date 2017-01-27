@@ -7,7 +7,6 @@
 //-----------------------------------------------------------------------------
 #include<stdio.h>
 #include<stdlib.h>
-#include<string.h>
 #include "List.h"
 // Private inner NodeObj struct, reference type Node, and constructor-
 // destructor pair. Not exported.
@@ -19,6 +18,7 @@ typedef struct NodeObj{
 
 typedef NodeObj* Node;
 
+// Constructor for the Node object
 Node newNode(int data) {
     Node temp = (Node) malloc(sizeof(NodeObj));
     if (temp==NULL) {
@@ -32,6 +32,7 @@ Node newNode(int data) {
     return(temp);
 }
 
+// Destructor for the Node object
 void freeNode(Node* pN) {
     if(pN!=NULL && *pN!=NULL){
         /* free all heap memory associated with *pN */
@@ -48,7 +49,7 @@ typedef struct ListObj {
     int cursorIndex;
 } ListObj;
 
-// Constructors-Destructors ---------------------------------------------------
+// Constructor for the List object
 List newList(void) {
     List temp = malloc(sizeof(ListObj));
     temp->front = temp->back = temp->cursor = NULL;
@@ -56,11 +57,14 @@ List newList(void) {
     temp->cursorIndex = -1;
     return temp;
 }
+// Destructor for the list object
 void freeList(List* pL) {
     if(pL!=NULL && *pL!=NULL){
         /* free all heap memory associated with *pL */
         clear(*pL);
-	free(*pL);
+        *pL->front = NULL;
+        *pL->back = NULL;
+        *pL->cursor = NULL;
         *pL = NULL;
     }
 }
@@ -111,8 +115,7 @@ void clear(List L) {
         deleteFront(L);
         // printf("Length = %d\n",L->length);
     }
-    L->front = L->back = L->cursor = NULL;
-    L->cursorIndex = -1;
+    L->front = L->back = L->cursor NULL;
 }
 // If List is non-empty, places the cursor under the front element,
 // otherwise does nothing.
@@ -198,6 +201,16 @@ void append(List L, int data) {
 // Insert new element before cursor.
 // Pre: length()>0, index()>=0
 void insertBefore(List L, int data) {
+    if (length<1) {
+        fprintf(stderr,
+        "insertBefore() cannot be called on empty List\n");
+        exit(EXIT_FAILURE);
+    }
+    if (cursorIndex<0) {
+        fprintf(stderr,
+        "insertBefore() cannot be called on when the cursor is not defined\n");
+        exit(EXIT_FAILURE);
+    }
     Node temp = newNode(data);
     Node tracer = L->front;
     // If inserting before the first element
@@ -224,6 +237,16 @@ void insertBefore(List L, int data) {
 // Inserts new element after cursor.
 // Pre: length()>0, index()>=0
 void insertAfter(List L, int data) {
+    if (length<1) {
+        fprintf(stderr,
+        "insertAfter() cannot be called on empty List\n");
+        exit(EXIT_FAILURE);
+    }
+    if (cursorIndex<0) {
+        fprintf(stderr,
+        "insertAfter() cannot be called on when the cursor is not defined\n");
+        exit(EXIT_FAILURE);
+    }
     Node temp = newNode(data);
     Node tracer = L->front;
     // Jump to correct position
@@ -253,21 +276,11 @@ void deleteFront(List L) {
         "deleteFront() cannot be called on empty List\n");
         exit(EXIT_FAILURE);
     }
-    // If there is only one element left
-    if (L->length==1) {
-	free(L->front);
-    	L->back = L->cursor = NULL;
-    }
-    else {
-    	L->front = L->front->next;
-    	L->front->last->next = NULL;
-    	free(L->front->last);
-    }
-    //L->front->last = NULL;
-    //free(&temp);
-    //temp->next = NULL;
-    //temp->last = NULL;
-    //freeNode(&temp);
+    Node temp = L->front;
+    L->front = L->front->next;
+    temp->next = NULL;
+    temp->last = NULL;
+    freeNode(&temp);
     //printf("%d ",L->length);
     //front.last = null;
     L->length--;
@@ -277,24 +290,21 @@ void deleteFront(List L) {
             L->cursor = NULL;
             L->cursorIndex = -1;
         }
-	else {
-            L->cursorIndex--;
-	}
+        L->cursorIndex--;
     }
 }
 // Deletes the back element. Pre: length()>0
 void deleteBack(List L) {
-    if (L->length==0) {
-    	free(L->back);
-        L->front = L->cursor = NULL;
+    if (L->length<1) {
+        fprintf(stderr,
+        "deleteBack() cannot be called on empty List\n");
+        exit(EXIT_FAILURE);
     }
-    else {
-    	Node temp = L->back;
-   	L->back = L->back->last;
-    	temp->next = NULL;
-    	temp->last = NULL;
-    	freeNode(&temp);
-    }
+    Node temp = L->back;
+    L->back = L->back->last;
+    temp->next = NULL;
+    temp->last = NULL;
+    freeNode(&temp);
     //back.next = null;
     L->length--;
     // Delete the cursor if it was the last element
@@ -306,6 +316,16 @@ void deleteBack(List L) {
 // Deletes cursor element, making cursor undefined.
 // Pre: length()>0, index()>=0
 void delete(List L) {
+    if (length<1) {
+        fprintf(stderr,
+        "delete() cannot be called on empty List\n");
+        exit(EXIT_FAILURE);
+    }
+    if (cursorIndex<0) {
+        fprintf(stderr,
+        "delete() cannot be called on when the cursor is not defined\n");
+        exit(EXIT_FAILURE);
+    }
     L->cursor->last->next = L->cursor->next;
     L->cursor->next->last = L->cursor->last;
     freeNode(&L->cursor);
@@ -329,11 +349,10 @@ List copyList(List L) {
     List tempList = newList();
     Node tracer = L->front;
     while (tracer!=NULL) {
-        //Node temp = newNode(tracer->data);
-        append(tempList, tracer->data);
+        Node temp = newNode(tracer->data);
+        append(tempList, temp->data);
         tracer = tracer->next;
     }
-    tracer = NULL;
     return tempList;
 }
 // Returns a new List which is the concatenation of

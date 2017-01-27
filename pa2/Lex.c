@@ -10,27 +10,16 @@
 #include<string.h>
 #include"List.h"
 
-//#include<string.h>
+// Constant for the length of a line and string
 #define MAX_LEN 160
 
-int strcmp(const char *s1, const char *s2);
-//char* strcpy(char* dst, char* src);
-
 int main(int argc, char* argv[]){
-
-    // int n, x, count=0;
-    // FILE *in, *out;
-    // char line[MAX_LEN];
-    // char tokenlist[MAX_LEN];
-    // char* token;
-
+    // Check if the number of command line arguments are correct
     if (argc!=3) {
         fprintf(stderr,
             "Usage: Lex <input file> <output file>\n");
             exit(EXIT_FAILURE);
     }
-
-    //-------------------------------
 
     FILE *infile, *outfile;
     char *stringList[MAX_LEN];
@@ -42,7 +31,7 @@ int main(int argc, char* argv[]){
     infile = fopen(argv[1], "r");
     outfile = fopen(argv[2], "w");
 
-    // Makes sure the file exists
+    // Makes sure the infile and outfile are not NULL
     if( infile==NULL ){
         printf("Unable to open file %s for reading\n", argv[1]);
         exit(1);
@@ -52,16 +41,10 @@ int main(int argc, char* argv[]){
         exit(1);
     }
 
-    // Reads in the lines of the file to the string array
-    //while ((length = getline(&line, &bufferLength, infile)) != -1) {
+    // Reads in the file to a string array one line at a time
     while (fgets(line, sizeof(line), infile)) {
-        //strcpy(stringList[counter], line);
-        //stringList[counter] = &line;
         stringList[counter] = calloc(strlen(line)+1, 1);
         strcpy(stringList[counter], line);
-        //printf("%s", line);
-        //printf("%d\n", counter);
-        //printf("%s", stringList[counter]);
         counter++;
     }
 
@@ -99,8 +82,9 @@ int main(int argc, char* argv[]){
         }
 
     }
-    //printList(stdout,tempList);
 
+    // Free the memory allocated for the string array that held the
+    // lines of the file
     for(int i = 0; i<counter; i++) {
     	free(stringList[i]);
     }
@@ -115,8 +99,8 @@ int main(int argc, char* argv[]){
         moveNext(tempList);
     }
 
+    // Free the memory we allocated for the list
     freeList(&tempList);
-
 
     /* close files */
     fclose(infile);
@@ -124,14 +108,4 @@ int main(int argc, char* argv[]){
 
 
     return(0);
-}
-
-int strcmp(const char *s1, const char *s2) {
-  int ret = 0;
-  while (!(ret = *(unsigned char *) s1 - *(unsigned char *) s2) && *s2) ++s1, ++s2;
-  if (ret < 0)
-    ret = -1;
-  else if (ret > 0)
-    ret = 1 ;
-  return ret;
 }
