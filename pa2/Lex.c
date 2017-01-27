@@ -82,13 +82,7 @@ int main(int argc, char* argv[]){
         }
 
     }
-
-    // Free the memory allocated for the string array that held the
-    // lines of the file
-    for(int i = 0; i<counter; i++) {
-    	free(stringList[i]);
-    }
-
+    
     // Prints the correct output to the file based on the list
     moveFront(tempList);
     while(index(tempList)>=0){
@@ -97,6 +91,12 @@ int main(int argc, char* argv[]){
         // based on the sorted List
         fprintf(outfile, "%s", stringList[x]);
         moveNext(tempList);
+    }
+
+    // Free the memory allocated for the string array that held the
+    // lines of the file
+    for(int i = 0; i<counter; i++) {
+    	free(stringList[i]);
     }
 
     // Free the memory we allocated for the list
