@@ -25,3 +25,9 @@ List.o : List.c List.h
 
 clean :
 	rm -f Lex ListClient Lex.o ListClient.o List.o
+
+submit:
+	submit cmps101-pt.w17 pa2 List.c ListClient.c List.h Lex.c Makefile README
+
+check:
+	ls /afs/cats.ucsc.edu/class/cmps101-pt.w17/pa2/salbrech
