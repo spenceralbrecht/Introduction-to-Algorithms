@@ -112,6 +112,7 @@ void clear(List L) {
         // printf("Length = %d\n",L->length);
     }
     L->front = L->back = L->cursor = NULL;
+    L->cursorIndex = -1;
 }
 // If List is non-empty, places the cursor under the front element,
 // otherwise does nothing.
@@ -252,12 +253,21 @@ void deleteFront(List L) {
         "deleteFront() cannot be called on empty List\n");
         exit(EXIT_FAILURE);
     }
-    Node temp = L->front;
-    L->front = L->front->next;
-    L->front->last = NULL;
+    // If there is only one element left
+    if (L->length==1) {
+	free(L->front);
+    	L->back = L->cursor = NULL;
+    }
+    else {
+    	L->front = L->front->next;
+    	L->front->last->next = NULL;
+    	free(L->front->last);
+    }
+    //L->front->last = NULL;
+    //free(&temp);
     //temp->next = NULL;
     //temp->last = NULL;
-    freeNode(&temp);
+    //freeNode(&temp);
     //printf("%d ",L->length);
     //front.last = null;
     L->length--;
@@ -267,16 +277,24 @@ void deleteFront(List L) {
             L->cursor = NULL;
             L->cursorIndex = -1;
         }
-        L->cursorIndex--;
+	else {
+            L->cursorIndex--;
+	}
     }
 }
 // Deletes the back element. Pre: length()>0
 void deleteBack(List L) {
-    Node temp = L->back;
-    L->back = L->back->last;
-    temp->next = NULL;
-    temp->last = NULL;
-    freeNode(&temp);
+    if (L->length==0) {
+    	free(L->back);
+        L->front = L->cursor = NULL;
+    }
+    else {
+    	Node temp = L->back;
+   	L->back = L->back->last;
+    	temp->next = NULL;
+    	temp->last = NULL;
+    	freeNode(&temp);
+    }
     //back.next = null;
     L->length--;
     // Delete the cursor if it was the last element
@@ -311,10 +329,11 @@ List copyList(List L) {
     List tempList = newList();
     Node tracer = L->front;
     while (tracer!=NULL) {
-        Node temp = newNode(tracer->data);
-        append(tempList, temp->data);
+        //Node temp = newNode(tracer->data);
+        append(tempList, tracer->data);
         tracer = tracer->next;
     }
+    tracer = NULL;
     return tempList;
 }
 // Returns a new List which is the concatenation of
