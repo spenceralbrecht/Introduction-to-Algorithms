@@ -7,7 +7,7 @@
 //-----------------------------------------------------------------------------
 #include<stdio.h>
 #include<stdlib.h>
-//#include<string.h>
+#include<string.h>
 #include"List.h"
 
 //#include<string.h>
@@ -100,6 +100,10 @@ int main(int argc, char* argv[]){
 
     }
     //printList(stdout,tempList);
+
+    for(int i = 0; i<counter; i++) {
+    	free(stringList[i]);
+    }
 
     // Prints the correct output to the file based on the list
     moveFront(tempList);
