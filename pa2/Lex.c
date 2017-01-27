@@ -111,6 +111,8 @@ int main(int argc, char* argv[]){
         moveNext(tempList);
     }
 
+    freeList(&tempList);
+
 
     /* close files */
     fclose(infile);
