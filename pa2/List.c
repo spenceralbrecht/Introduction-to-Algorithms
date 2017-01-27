@@ -7,6 +7,7 @@
 //-----------------------------------------------------------------------------
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 #include "List.h"
 // Private inner NodeObj struct, reference type Node, and constructor-
 // destructor pair. Not exported.
@@ -59,6 +60,7 @@ void freeList(List* pL) {
     if(pL!=NULL && *pL!=NULL){
         /* free all heap memory associated with *pL */
         clear(*pL);
+	free(*pL);
         *pL = NULL;
     }
 }
@@ -252,8 +254,9 @@ void deleteFront(List L) {
     }
     Node temp = L->front;
     L->front = L->front->next;
-    temp->next = NULL;
-    temp->last = NULL;
+    L->front->last = NULL;
+    //temp->next = NULL;
+    //temp->last = NULL;
     freeNode(&temp);
     //printf("%d ",L->length);
     //front.last = null;
