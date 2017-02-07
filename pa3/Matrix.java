@@ -112,7 +112,7 @@ public class Matrix {
 
    // changes ith row, jth column of this Matrix to x
    // pre: 1<=i<=getSize(), 1<=j<=getSize()
-   void changeEntry(int rowNum, int colNum, double value) {
+   void changeEntry(int rowNum, int colNum, double insertValue) {
       if (rowNum<1) {
          throw new RuntimeException("Row number must be greater than 1 in changeEntry() in Matrix.java");
       }
@@ -126,15 +126,37 @@ public class Matrix {
          throw new RuntimeException("Column number must be less than Matrix size in Matrix.java");
       }
       // Case 2
-      // Move the cursor to the front to start iterating
+      // Move to the correct position
       this.rows[rowNum].moveFront();
-      if (value==0 && colNum!=0) {
-         // Starts at 1 because there is no column 0
-         for (int i = 1; i < colNum; i++) {
-            this.rows[rowNum].moveNext();
-         }
+      for (int i = 1; i < colNum; i++) {
+         this.rows[rowNum].moveNext();
+      }
+
+      Entry temp = (Entry) this.rows[rowNum].get()
+      int valueAtPosition = temp.value;
+
+      // Case 2
+      if (insertValue==0 && valueAtPosition!=0) {
          // Delete the Node at the correct position
          this.rows[rowNum].delete();
+         this.numNonZero--;
+      }
+      else if (insertValue!=0) {
+         if (valueAtPosition==0) {
+            Entry tempEntry = new Entry(rowNum,colNum,insertValue);
+            this.rows[rowNum].insert(tempEntry);
+         }
+         else {
+            this.rows[rowNum].get().value = insertValue;
+         }
+
+      }
+
+
+
+      // Case 3
+      if (value!=0 && ) {
+
       }
    }
 
