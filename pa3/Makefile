@@ -6,7 +6,7 @@
 #  jar file called Sparse.
 #------------------------------------------------------------------------------
 
-MAINCLASS  = List
+MAINCLASS  = ListTest
 JAVAC      = javac
 JAVASRC    = $(wildcard *.java)
 SOURCES    = $(JAVASRC) makefile README

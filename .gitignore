@@ -1,6 +1,8 @@
 *.class 
 *.txt
 *.o
+*.exe
+ListTest
 ListClient 
 Lex
 
