@@ -126,33 +126,40 @@ public class Matrix {
          throw new RuntimeException("Column number must be less than Matrix size in Matrix.java");
       }
       // Case 2
-      // Move to the correct position
       this.rows[rowNum].moveFront();
-      for (int i = 1; i < colNum; i++) {
+      // Move to correct column number
+      while (colNum < ((Entry) this.rows[rowNum].get()).column)
          this.rows[rowNum].moveNext();
       }
-
-      Entry temp = (Entry) this.rows[rowNum].get()
+      // Store the column number and value of the Node we are at
+      Entry temp = (Entry) this.rows[rowNum].get();
       int valueAtPosition = temp.value;
+      int columnAtPosition = temp.column;
 
       // Case 2
-      if (insertValue==0 && valueAtPosition!=0) {
-         // Delete the Node at the correct position
-         this.rows[rowNum].delete();
-         this.numNonZero--;
+      if (columnAtPosition == colNum) {
+         // Delete the Node if it is in the correct position
+         if (insertValue==0 && valueAtPosition!=0) {
+            // Delete the Node at the correct position
+            this.rows[rowNum].delete();
+            this.numNonZero--;
+         }
+         if (insertValue!=0 && valueAtPosition!=0) {
+            temp.value = insertValue;
+         }
       }
+
+      // Case 3
       else if (insertValue!=0) {
          if (valueAtPosition==0) {
             Entry tempEntry = new Entry(rowNum,colNum,insertValue);
             this.rows[rowNum].insert(tempEntry);
          }
          else {
-            this.rows[rowNum].get().value = insertValue;
+            ((Entry) this.rows[rowNum].get()).value = insertValue;
          }
 
       }
-
-
 
       // Case 3
       if (value!=0 && ) {
@@ -189,7 +196,11 @@ public class Matrix {
    // Other functions
    // overrides Object's toString() method
    public String toString() {
-
+      String output;
+      for (int i = 0; i < this.getSize()+1, i++) {
+         output+=this.rows[i].toString()+"\n";
+      }
+      return output;
    }
 
 }
