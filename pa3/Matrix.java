@@ -176,14 +176,112 @@ public class Matrix {
    }
 
    // returns a new Matrix that is the scalar product of this Matrix with x
-   // Matrix scalarMult(double x) {
-   //
-   // }
-   //
-   // // returns a new Matrix that is the sum of this Matrix with M
-   // // pre: getSize()==M.getSize()
-   // Matrix add(Matrix M) {
-   // }
+   Matrix scalarMult(double scalar) {
+      Matrix tempMatrix = new Matrix(this.getSize());
+      for (int i = 1; i < this.getSize(); i++) {
+         List currentList = this.rows[i];
+         if (currentList.length()>0) {
+            currentList.moveFront();
+            // Loop that iterates through each list
+            for (int j = 0; j < currentList.length(); j++) {
+               Entry currentEntry = (Entry) currentList.get();
+               tempMatrix.changeEntry(i,j+1,scalar*currentEntry.value);
+               currentList.moveNext();
+            }
+         }
+      }
+      return tempMatrix;
+   }
+   // returns a new Matrix that is the sum of this Matrix with M
+   // pre: getSize()==M.getSize()
+   Matrix add(Matrix M) {
+      if (this.getSize()!=M.getSize()) {
+         throw new RuntimeException("Sizes must match in add() in Matrix.java");
+      }
+      Matrix resultMatrix = new Matrix(this.getSize());
+      // Outer loop that iterates through the Lists
+      for (int i = 1; i < this.getSize()+1; i++) {
+         List thisList = this.rows[i];
+         List otherList = M.rows[i];
+         List resultList = resultMatrix.rows[i];
+         // Case 1: My list is empty but the other isnt
+         if (thisList.length()==0 && otherList.length()!=0) {
+            List newList = otherList.copy();
+            resultList = newList;
+         }
+         // Case 2: My list is not empty but the other list is
+         else if (thisList.length()!=0 && otherList.length()==0) {
+            List newList = thisList.copy();
+            resultList = newList;
+         }
+         // Case 3: Both lists exist and we must iterate through them
+         else if (thisList.length()>0 && otherList.length()>0) {
+            int maxLength = 0;
+            boolean thisListDone = false;
+            boolean otherListDone = false;
+            // Find the length of the longest list
+            if (thisList.length() >= otherList.length()) {
+               maxLength = thisList.length();
+            }
+            else {
+               maxLength = otherList.length();
+            }
+            thisList.moveFront();
+            otherList.moveFront();
+            resultList.moveFront();
+            // Loop that iterates through elements until lists are
+            // fully iterated through
+            for (int j = 0; j < maxLength; j++) {
+
+               // Get the current entry f each list if there are still nodes
+               if (thisList.index()!=-1) {
+                  Entry thisEntry = (Entry) thisList.get();
+                  thisListDone = true;
+               }
+               if (otherList.index()!=-1) {
+                  Entry otherEntry = (Entry) otherList.get();
+                  otherListDone = true;
+               }
+
+               // Create a new entry with the added values if the columns match
+               if (!otherListDone && !thisListDone) {
+                  if (thisEntry.column==otherEntry.column) {
+                     double newValue = thisEntry.value+otherEntry.value;
+                     Entry newEntry = new Entry(thisEntry.column,newValue);
+                     resultList.append(newEntry);
+                     thisList.moveNext();
+                     otherList.moveNext();
+                  }
+                  else if (thisEntry.column < otherEntry.column) {
+                     Entry newEntry = new Entry(thisEntry.column,thisEntry.value);
+                     resultList.append(newEntry);
+                     thisList.moveNext();
+                  }
+                  else {
+                     Entry newEntry = new Entry(otherEntry.column,otherEntry.value);
+                     resultList.append(newEntry);
+                     otherList.moveNext();
+                  }
+               }
+               else if (otherListDone && !thisListDone) {
+                  while(thisList.index()!=-1) {
+                     Entry newEntry = new Entry(thisEntry.column,thisEntry.value);
+                     resultList.append(newEntry);
+                     thisList.moveNext();
+                  }
+               }
+               else if (!otherListDone && thisListDone) {
+                  while(otherList.index()!=-1) {
+                     Entry newEntry = new Entry(otherEntry.column,otherEntry.value);
+                     resultList.append(newEntry);
+                     otherList.moveNext();
+                  }
+               }
+            }
+         }
+      }
+      return resultMatrix;
+   }
    //
    // // returns a new Matrix that is the difference of this Matrix with M
    // // pre: getSize()==M.getSize()
