@@ -1,9 +1,9 @@
 //-----------------------------------------------------------------------------
-//  MatrixClient.java
+//  MatrixTest.java
 //  A test client for the Matrix ADT
 //-----------------------------------------------------------------------------
 
-public class MatrixClient{
+public class MatrixTest {
    public static void main(String[] args){
       int i, j, n=100000;
       Matrix A = new Matrix(n);
@@ -25,35 +25,35 @@ public class MatrixClient{
       System.out.println(B.getNNZ());
       System.out.println(B);
 
-      Matrix C = A.scalarMult(1.5);
-      System.out.println(C.getNNZ());
-      System.out.println(C);
+      // Matrix C = A.scalarMult(1.5);
+      // System.out.println(C.getNNZ());
+      // System.out.println(C);
+      //
+      // Matrix D = A.add(A);
+      // System.out.println(D.getNNZ());
+      // System.out.println(D);
+      //
+      // Matrix E = A.sub(A);
+      // System.out.println(E.getNNZ());
+      // System.out.println(E);
+      //
+      // Matrix F = B.transpose();
+      // System.out.println(F.getNNZ());
+      // System.out.println(F);
+      //
+      // Matrix G = B.mult(B);
+      // System.out.println(G.getNNZ());
+      // System.out.println(G);
+      //
+      // Matrix H = A.copy();
+      // System.out.println(H.getNNZ());
+      // System.out.println(H);
+      // System.out.println(A.equals(H));
+      // System.out.println(A.equals(B));
+      // System.out.println(A.equals(A));
 
-      Matrix D = A.add(A);
-      System.out.println(D.getNNZ());
-      System.out.println(D);
-
-      Matrix E = A.sub(A);
-      System.out.println(E.getNNZ());
-      System.out.println(E);
-
-      Matrix F = B.transpose();
-      System.out.println(F.getNNZ());
-      System.out.println(F);
-
-      Matrix G = B.mult(B);
-      System.out.println(G.getNNZ());
-      System.out.println(G);
-
-      Matrix H = A.copy();
-      System.out.println(H.getNNZ());
-      System.out.println(H);
-      System.out.println(A.equals(H));
-      System.out.println(A.equals(B));
-      System.out.println(A.equals(A));
-
-      A.makeZero();
-      System.out.println(A.getNNZ());
-      System.out.println(A);
+      // A.makeZero();
+      // System.out.println(A.getNNZ());
+      // System.out.println(A);
    }
 }

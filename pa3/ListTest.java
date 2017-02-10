@@ -1,7 +1,9 @@
 //-----------------------------------------------------------------------------
-//  ListClient.java
-//  A test client for the List ADT. Use this to test your list module. The
-//  correct output is given below.
+// Spencer Albrecht
+// salbrech
+// PA3 CS101
+// ListTest.java
+// A test client for the List Object ADT. The correct output is given below.
 //-----------------------------------------------------------------------------
 
 public class ListTest{
