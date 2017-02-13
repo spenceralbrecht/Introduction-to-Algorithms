@@ -9,40 +9,53 @@ public class MatrixTest {
       Matrix A = new Matrix(n);
       Matrix B = new Matrix(n);
 
-      A.changeEntry(1,1,1); B.changeEntry(1,1,9);
-      A.changeEntry(1,2,2); B.changeEntry(1,2,8);
-      A.changeEntry(1,3,3); B.changeEntry(1,3,7);
-      A.changeEntry(2,1,4); B.changeEntry(2,1,6);
-      A.changeEntry(2,2,5); B.changeEntry(2,2,5);
-      A.changeEntry(2,3,6); B.changeEntry(2,3,4);
-      A.changeEntry(3,1,7); B.changeEntry(3,1,3);
-      A.changeEntry(3,2,8); B.changeEntry(3,2,2);
+      A.changeEntry(1,1,1); B.changeEntry(1,1,1);
+      A.changeEntry(1,2,2); B.changeEntry(1,2,0);
+      A.changeEntry(1,3,3); B.changeEntry(1,3,1);
+      A.changeEntry(2,1,4); B.changeEntry(2,1,0);
+      A.changeEntry(2,2,5); B.changeEntry(2,2,0);
+      A.changeEntry(2,3,6); B.changeEntry(2,3,0);
+      A.changeEntry(3,1,7); B.changeEntry(3,1,1);
+      A.changeEntry(3,2,8); B.changeEntry(3,2,1);
       A.changeEntry(3,3,9); B.changeEntry(3,3,1);
 
-      System.out.println(A.getNNZ());
+      System.out.println("A has "+A.getNNZ()+" non-zero entries:");
       System.out.println(A);
 
-    //   System.out.println(B.getNNZ());
-    //   System.out.println(B);
+      System.out.println("B has "+B.getNNZ()+" non-zero entries:");
+      System.out.println(B);
 
-      System.out.println(A.equals(B));
-      System.out.println(A.equals(A));
-
-      Matrix C = A.scalarMult(2.0);
+      System.out.println("(1.5)*A = ");
+      Matrix C = A.scalarMult(1.5);
       System.out.println(C.getNNZ());
       System.out.println(C);
 
-      Matrix D = C.add(A);
+      System.out.println("A+B = ");
+      Matrix D = A.add(B);
       System.out.println(D.getNNZ());
       System.out.println(D);
+
+      System.out.println("A+A = ");
+      System.out.println(A.add(A));
+
+      System.out.println("B-A = ");
+      System.out.println(B.sub(A));
+
+      System.out.println("A-A = ");
+      System.out.println(A.sub(A));
+
+    //   System.out.println(A.equals(B));
+    //   System.out.println(B.equals(C));
+    //   System.out.println(C.equals(D));
+    //   System.out.println(A.equals(A));
       //
-      // Matrix D = A.add(A);
-      // System.out.println(D.getNNZ());
-      // System.out.println(D);
-      //
-      // Matrix E = A.sub(A);
-      // System.out.println(E.getNNZ());
-      // System.out.println(E);
+    //   Matrix D = A.add(A);
+    //   System.out.println(D.getNNZ());
+    //   System.out.println(D);
+    //
+    //   Matrix E = A.sub(A);
+    //   System.out.println(E.getNNZ());
+    //   System.out.println(E);
       //
       // Matrix F = B.transpose();
       // System.out.println(F.getNNZ());

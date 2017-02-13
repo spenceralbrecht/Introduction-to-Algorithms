@@ -169,6 +169,7 @@ public class Matrix {
          if (insertValue!=0) {
             Entry insertEntry = new Entry(colNum, insertValue);
             this.rows[rowNum].prepend(insertEntry);
+            this.numNonZero++;
          }
       }
 
@@ -193,11 +194,14 @@ public class Matrix {
       return tempMatrix;
    }
 
-   List addList(List firstList, List secondList) {
+   List addList(List list, List secondList) {
 
-       int totalElements = firstList.length()+secondList.length();
+       int totalElements = list.length()+secondList.length();
        List newList = new List();
        if (totalElements > 0) {
+           // Create a copy of the list just in case the two lists are
+           // actually the same list
+           List firstList = list.copy();
            //System.out.println("total elements = "+totalElements);
            //System.out.println("first list = "+firstList.toString());
            //System.out.println("second list = "+secondList.toString());
@@ -208,6 +212,7 @@ public class Matrix {
            while (firstList.index()!=-1 && secondList.index()!=-1) {
                Entry entryOne = (Entry) firstList.get();
                Entry entryTwo = (Entry) secondList.get();
+               //System.out.println("index for both lists = "+firstList.index());
                if (entryOne.column==entryTwo.column) {
                   double newValue = entryOne.value+entryTwo.value;
                   Entry newEntry = new Entry(entryOne.column, newValue);
@@ -247,62 +252,8 @@ public class Matrix {
                     firstList.moveNext();
                }
            }
-           System.out.println("new list = "+newList.toString());
+           //System.out.println("new list = "+newList.toString());
        }
-
-    //    for (int i = 0; i < totalElements; i++) {
-    //        System.out.println("counter = "+counter);
-    //        if (firstList.index()!=-1) {
-    //            System.out.println("line 206");
-    //            if (secondList.index()!=-1) {
-    //                System.out.println("line 208");
-    //                Entry entryOne = (Entry) firstList.get();
-    //                Entry entryTwo = (Entry) secondList.get();
-    //                if (entryOne.column==entryTwo.column) {
-    //                    System.out.println("line 212");
-    //                    double newValue = entryOne.value+entryTwo.value;
-    //                    Entry newEntry = new Entry(entryOne.column, newValue);
-    //                    newList.append(newEntry);
-    //                    firstList.moveNext();
-    //                    secondList.moveNext();
-    //                    // Move the counter twice because we moved over two elements
-    //                    i++;
-    //                }
-    //                else if (entryOne.column < entryTwo.column) {
-    //                    System.out.println("line 222");
-    //                    Entry newEntry = new Entry(entryOne.column, entryOne.value);
-    //                    newList.append(newEntry);
-    //                    firstList.moveNext();
-    //                    //counter++;
-    //                }
-    //                else {
-    //                    System.out.println("line 229");
-    //                    Entry newEntry = new Entry(entryTwo.column, entryTwo.value);
-    //                    newList.append(newEntry);
-    //                    secondList.moveNext();
-    //                    //counter++;
-    //                }
-    //            }
-    //            // If the first list still has elements but the second doesn't
-    //            else {
-    //                System.out.println("line 238");
-    //                Entry entryOne = (Entry) firstList.get();
-    //                Entry newEntry = new Entry(entryOne.column, entryOne.value);
-    //                newList.append(newEntry);
-    //                secondList.moveNext();
-    //                //counter++;
-    //            }
-    //        }
-    //        // If the second list still has elements but the first one doesn't
-    //        else if (firstList.index()==-1 && secondList.index()!=-1) {
-    //            System.out.println("line 248");
-    //            Entry entryTwo = (Entry) secondList.get();
-    //            Entry newEntry = new Entry(entryTwo.column, entryTwo.value);
-    //            newList.append(newEntry);
-    //            secondList.moveNext();
-    //            //counter++;
-    //        }
-    //    }
 
        return newList;
    }
@@ -316,6 +267,8 @@ public class Matrix {
       for (int i = 1; i < this.getSize()+1; i++) {
           List thisList = this.rows[i];
           List otherList = M.rows[i];
+          //System.out.println("this list = "+thisList.toString());
+          //System.out.println("other list = "+otherList.toString());
           List resultList = addList(thisList, otherList);
           resultList.moveFront();
           // Loops through the new list and adds the values to the new matrix
@@ -325,99 +278,18 @@ public class Matrix {
               resultList.moveNext();
           }
       }
-    //   List thisList = this.rows[1];
-    //   List otherList = M.rows[1];
-    //   List resultList = addList(thisList, otherList);
-      //System.out.println(resultList);
-
-      // Outer loop that iterates through the Lists
-    //   for (int i = 1; i < this.getSize()+1; i++) {
-    //      List thisList = this.rows[i];
-    //      List otherList = M.rows[i];
-    //      List resultList = resultMatrix.rows[i];
-    //      // Case 1: My list is empty but the other isnt
-    //      if (thisList.length()==0 && otherList.length()!=0) {
-    //         List newList = otherList.copy();
-    //         resultList = newList;
-    //      }
-    //      // Case 2: My list is not empty but the other list is
-    //      else if (thisList.length()!=0 && otherList.length()==0) {
-    //         List newList = thisList.copy();
-    //         resultList = newList;
-    //      }
-    //      // Case 3: Both lists exist and we must iterate through them
-    //      else if (thisList.length()>0 && otherList.length()>0) {
-    //         int maxLength = 0;
-    //         boolean thisListDone = false;
-    //         boolean otherListDone = false;
-    //         // Find the length of the longest list
-    //         if (thisList.length() >= otherList.length()) {
-    //            maxLength = thisList.length();
-    //         }
-    //         else {
-    //            maxLength = otherList.length();
-    //         }
-    //         thisList.moveFront();
-    //         otherList.moveFront();
-    //         resultList.moveFront();
-    //         // Loop that iterates through elements until lists are
-    //         // fully iterated through
-    //         for (int j = 0; j < maxLength; j++) {
-      //
-    //            // Get the current entry f each list if there are still nodes
-    //            if (thisList.index()!=-1) {
-    //               Entry thisEntry = (Entry) thisList.get();
-    //               thisListDone = true;
-    //            }
-    //            if (otherList.index()!=-1) {
-    //               Entry otherEntry = (Entry) otherList.get();
-    //               otherListDone = true;
-    //            }
-      //
-    //            // Create a new entry with the added values if the columns match
-    //            if (!otherListDone && !thisListDone) {
-    //               if (thisEntry.column==otherEntry.column) {
-    //                  double newValue = thisEntry.value+otherEntry.value;
-    //                  Entry newEntry = new Entry(thisEntry.column,newValue);
-    //                  resultList.append(newEntry);
-    //                  thisList.moveNext();
-    //                  otherList.moveNext();
-    //               }
-    //               else if (thisEntry.column < otherEntry.column) {
-    //                  Entry newEntry = new Entry(thisEntry.column,thisEntry.value);
-    //                  resultList.append(newEntry);
-    //                  thisList.moveNext();
-    //               }
-    //               else {
-    //                  Entry newEntry = new Entry(otherEntry.column,otherEntry.value);
-    //                  resultList.append(newEntry);
-    //                  otherList.moveNext();
-    //               }
-    //            }
-    //            else if (otherListDone && !thisListDone) {
-    //               while(thisList.index()!=-1) {
-    //                  Entry newEntry = new Entry(thisEntry.column,thisEntry.value);
-    //                  resultList.append(newEntry);
-    //                  thisList.moveNext();
-    //               }
-    //            }
-    //            else if (!otherListDone && thisListDone) {
-    //               while(otherList.index()!=-1) {
-    //                  Entry newEntry = new Entry(otherEntry.column,otherEntry.value);
-    //                  resultList.append(newEntry);
-    //                  otherList.moveNext();
-    //               }
-    //            }
-    //         }
-    //      }
-    //   }
       return resultMatrix;
    }
-   //
-   // // returns a new Matrix that is the difference of this Matrix with M
-   // // pre: getSize()==M.getSize()
-   // Matrix sub(Matrix M) {
-   // }
+
+   // returns a new Matrix that is the difference of this Matrix with M
+   // pre: getSize()==M.getSize()
+   Matrix sub(Matrix M) {
+       if (this.getSize()!=M.getSize()) {
+          throw new RuntimeException("Sizes must match in sub() in Matrix.java");
+       }
+       Matrix resultMatrix = this.add(M.scalarMult(-1.0));
+       return resultMatrix;
+   }
    //
    // // returns a new Matrix that is the transpose of this Matrix
    // Matrix transpose() {
