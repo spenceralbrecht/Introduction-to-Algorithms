@@ -22,8 +22,8 @@ public class MatrixTest {
       System.out.println(A.getNNZ());
       System.out.println(A);
 
-      System.out.println(B.getNNZ());
-      System.out.println(B);
+    //   System.out.println(B.getNNZ());
+    //   System.out.println(B);
 
       System.out.println(A.equals(B));
       System.out.println(A.equals(A));
