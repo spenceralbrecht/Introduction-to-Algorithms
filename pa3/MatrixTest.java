@@ -44,11 +44,14 @@ public class MatrixTest {
       System.out.println("A-A = ");
       System.out.println(A.sub(A));
 
+      System.out.println("Transpose(A) = ");
+      System.out.println(A.transpose());
+
     //   System.out.println(A.equals(B));
     //   System.out.println(B.equals(C));
     //   System.out.println(C.equals(D));
     //   System.out.println(A.equals(A));
-      //
+
     //   Matrix D = A.add(A);
     //   System.out.println(D.getNNZ());
     //   System.out.println(D);

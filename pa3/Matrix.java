@@ -104,10 +104,8 @@ public class Matrix {
    // Must use changeEntry()
    Matrix copy() {
       Matrix newMatrix = new Matrix(this.getSize());
-      for(int i = 0; i < this.getSize()+1; i++) {
-         List tempList = this.rows[i+1].copy();
-         newMatrix.rows[i+1] = tempList;
-      }
+      //Matrix copyMatrix = new Matrix(this.getSize());
+      newMatrix = this.add(newMatrix);
       return newMatrix;
    }
 
@@ -290,11 +288,21 @@ public class Matrix {
        Matrix resultMatrix = this.add(M.scalarMult(-1.0));
        return resultMatrix;
    }
-   //
-   // // returns a new Matrix that is the transpose of this Matrix
-   // Matrix transpose() {
-   //
-   // }
+
+   // returns a new Matrix that is the transpose of this Matrix
+   Matrix transpose() {
+       Matrix resultMatrix = new Matrix(this.getSize());
+       for (int i = 1; i < this.getSize(); i++) {
+           this.rows[i].moveFront();
+           for (int j = 0; j < this.rows[i].length(); j++) {
+               Entry temp = (Entry) this.rows[i].get();
+               resultMatrix.changeEntry(temp.column, i, temp.value);
+               this.rows[i].moveNext();
+           }
+
+       }
+       return resultMatrix;
+   }
    //
    // // returns a new Matrix that is the product of this Matrix with M
    // // pre: getSize()==M.getSize()
