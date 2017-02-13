@@ -47,6 +47,9 @@ public class MatrixTest {
       System.out.println("Transpose(A) = ");
       System.out.println(A.transpose());
 
+      System.out.println("Copy of A = ");
+      System.out.println(A.copy());
+
     //   System.out.println(A.equals(B));
     //   System.out.println(B.equals(C));
     //   System.out.println(C.equals(D));

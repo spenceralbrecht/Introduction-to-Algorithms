@@ -103,10 +103,17 @@ public class Matrix {
    // returns a new Matrix having the same entries as this Matrix
    // Must use changeEntry()
    Matrix copy() {
-      Matrix newMatrix = new Matrix(this.getSize());
-      //Matrix copyMatrix = new Matrix(this.getSize());
-      newMatrix = this.add(newMatrix);
-      return newMatrix;
+      Matrix resultMatrix = new Matrix(this.getSize());
+      for (int i = 1; i < this.getSize(); i++) {
+          this.rows[i].moveFront();
+          for (int j = 0; j < this.rows[i].length(); j++) {
+              Entry temp = (Entry) this.rows[i].get();
+              resultMatrix.changeEntry(i, temp.column, temp.value);
+              this.rows[i].moveNext();
+          }
+
+      }
+      return resultMatrix;
    }
 
    // changes ith row, jth column of this Matrix to x
@@ -156,9 +163,12 @@ public class Matrix {
             }
          }
          else {
-            Entry insertEntry = new Entry(colNum, insertValue);
-            this.rows[rowNum].insertAfter(insertEntry);
-            this.numNonZero++;
+            if (insertValue!=0) {
+                Entry insertEntry = new Entry(colNum, insertValue);
+                this.rows[rowNum].insertAfter(insertEntry);
+                this.numNonZero++;
+            }
+
          }
       }
       // List at row is empty
@@ -303,9 +313,15 @@ public class Matrix {
        }
        return resultMatrix;
    }
-   //
-   // // returns a new Matrix that is the product of this Matrix with M
-   // // pre: getSize()==M.getSize()
+
+   // Returns a double that is the dot product of the row in this Matrix
+   // with the correct column number in the other Matrix 
+   double dot(Matrix other, int row) {
+
+   }
+
+   // returns a new Matrix that is the product of this Matrix with M
+   // pre: getSize()==M.getSize()
    // Matrix mult(Matrix M) {
    //
    // }
