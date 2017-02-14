@@ -17,9 +17,7 @@ class Sparse {
         // Store the results of the first line of the input file
         size = Integer.parseInt(specifics[0]);
         numEntriesOne = Integer.parseInt(specifics[1]);
-        //System.out.println(numEntriesOne);
         numEntriesTwo = Integer.parseInt(specifics[2]);
-        //System.out.println(numEntriesTwo);
         // Skip a line
         fileIn.nextLine();
         Matrix A = new Matrix(size);
@@ -27,9 +25,6 @@ class Sparse {
         // Loop that fills matrix A
         for (int i = 0; i < numEntriesOne; i++) {
            String[] input = fileIn.nextLine().split(" ");
-           //System.out.println(input[0]);
-           //System.out.println(input[1]);
-           //System.out.println(input[2]);
            A.changeEntry(Integer.parseInt(input[0]), Integer.parseInt(input[1]), Double.parseDouble(input[2]));
         }
         fileIn.nextLine();
@@ -39,6 +34,7 @@ class Sparse {
            B.changeEntry(Integer.parseInt(input[0]), Integer.parseInt(input[1]), Double.parseDouble(input[2]));
         }
 
+       // Output for the matrix operations
        fileOut.println("A has "+A.getNNZ()+" non-zero entries:");
        fileOut.println(A);
 
@@ -64,10 +60,10 @@ class Sparse {
        fileOut.println("Transpose(A) = ");
        fileOut.println(A.transpose());
 
-       fileOut.println("A*B");
+       fileOut.println("A*B = ");
        fileOut.println(A.mult(B));
 
-       fileOut.println("B*B");
+       fileOut.println("B*B = ");
        fileOut.println(B.mult(B));
 
        fileOut.close();

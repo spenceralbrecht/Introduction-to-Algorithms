@@ -169,14 +169,19 @@ public class Matrix {
             // If the value to be inserted isn't 0
             if (insertValue!=0) {
                 Entry insertEntry = new Entry(colNum, insertValue);
-                this.rows[rowNum].insertAfter(insertEntry);
+                if (colNum < ((Entry) currentList.get()).column) {
+                   this.rows[rowNum].insertBefore(insertEntry);
+                }
+                else {
+                   this.rows[rowNum].insertAfter(insertEntry);
+                }
                 this.numNonZero++;
             }
          }
       }
       // List at row is empty
       else {
-         // Insert the entry is the value isn't zero
+         // Insert the entry if the value isn't zero
          if (insertValue!=0) {
             Entry insertEntry = new Entry(colNum, insertValue);
             this.rows[rowNum].prepend(insertEntry);
@@ -194,9 +199,9 @@ public class Matrix {
          if (currentList.length()>0) {
             currentList.moveFront();
             // Loop that iterates through each list
-            for (int j = 0; j < currentList.length(); j++) {
+            for (int j = 1; j <= currentList.length(); j++) {
                Entry currentEntry = (Entry) currentList.get();
-               tempMatrix.changeEntry(i,j+1,scalar*currentEntry.value);
+               tempMatrix.changeEntry(i,currentEntry.column,scalar*currentEntry.value);
                currentList.moveNext();
             }
          }
