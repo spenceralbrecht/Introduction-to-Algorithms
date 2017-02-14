@@ -349,15 +349,18 @@ public class Matrix {
       System.out.println("Transpose of B = ");
       System.out.println(transposed);
       for (int i = 1; i < this.getSize(); i++) {
-         for (int j = 1; j < transposed.getSize(); j++) {
-            int listOneSize = this.rows[i].length();
-            int listTwoSize = transposed.rows[j].length();
-            System.out.println("L1 size = "+listOneSize);
-            System.out.println("L2 size = "+listTwoSize);
-            if (listOneSize>0 && listTwoSize>0) {
-               //System.out.println("numElements for both rows"+numElements);
-               double newValue = dot(this.rows[i],transposed.rows[j]);
-               resultMatrix.changeEntry(i, j, newValue);
+         if (this.rows[i].length()>0) {
+            for (int j = 1; j < transposed.getSize(); j++) {
+               int listOneSize = this.rows[i].length();
+               int listTwoSize = transposed.rows[j].length();
+               //System.out.println("L1 size = "+listOneSize);
+               //System.out.println("L2 size = "+listTwoSize);
+               if (listOneSize>0 && listTwoSize>0) {
+                  //System.out.println("numElements for both rows"+numElements);
+                  //System.out.println("line 359");
+                  double newValue = dot(this.rows[i],transposed.rows[j]);
+                  resultMatrix.changeEntry(i, j, newValue);
+               }
             }
          }
       }
