@@ -315,16 +315,60 @@ public class Matrix {
    }
 
    // Returns a double that is the dot product of the row in this Matrix
-   // with the correct column number in the other Matrix 
-   double dot(Matrix other, int row) {
-
+   // with the correct column number in the other Matrix
+   double dot(List firstList, List secondList) {
+      double sum = 0.0;
+      firstList.moveFront();
+      secondList.moveFront();
+      while (firstList.index()!=-1 && secondList.index()!=-1) {
+          Entry entryOne = (Entry) firstList.get();
+          Entry entryTwo = (Entry) secondList.get();
+          //System.out.println("index for both lists = "+firstList.index());
+          if (entryOne.column==entryTwo.column) {
+             sum += entryOne.value*entryTwo.value;
+             firstList.moveNext();
+             secondList.moveNext();
+         }
+         else if (entryOne.column < entryTwo.column) {
+            firstList.moveNext();        }
+        else {
+            secondList.moveNext();
+        }
+      }
+      return sum;
    }
 
    // returns a new Matrix that is the product of this Matrix with M
    // pre: getSize()==M.getSize()
-   // Matrix mult(Matrix M) {
-   //
-   // }
+   Matrix mult(Matrix M) {
+      if (this.getSize()!=M.getSize()) {
+         throw new RuntimeException("Sizes must match in mult() in Matrix.java");
+      }
+      Matrix resultMatrix = new Matrix(this.getSize());
+      Matrix transposed = M.transpose();
+      System.out.println("Transpose of B = ");
+      System.out.println(transposed);
+      for (int i = 1; i < this.getSize(); i++) {
+         for (int j = 1; j < transposed.getSize(); j++) {
+            int listOneSize = this.rows[i].length();
+            int listTwoSize = transposed.rows[j].length();
+            System.out.println("L1 size = "+listOneSize);
+            System.out.println("L2 size = "+listTwoSize);
+            if (listOneSize>0 && listTwoSize>0) {
+               //System.out.println("numElements for both rows"+numElements);
+               double newValue = dot(this.rows[i],transposed.rows[j]);
+               resultMatrix.changeEntry(i, j, newValue);
+            }
+         }
+      }
+      // List one = this.rows[1];
+      // List two = M.rows[1];
+      // System.out.println("first list = "+one.toString());
+      // System.out.println("second list = "+two.toString());
+      // double dot = dot(this.rows[1],M.rows[1]);
+      // System.out.println(dot);
+      return resultMatrix;
+   }
 
    // Other functions
    // overrides Object's toString() method

@@ -50,6 +50,9 @@ public class MatrixTest {
       System.out.println("Copy of A = ");
       System.out.println(A.copy());
 
+      System.out.println("A*B");
+      System.out.println(A.mult(B));
+
     //   System.out.println(A.equals(B));
     //   System.out.println(B.equals(C));
     //   System.out.println(C.equals(D));
