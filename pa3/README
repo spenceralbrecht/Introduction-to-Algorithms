@@ -1,15 +1,20 @@
 Files submitted for Programming Assignment 3.
 
-Sparse.java -
+Sparse.java - A program that reads in data from a file and creates appropriate
+matrices based off of the input data. It then performs matrix operations and
+outputs the data to a file
 
-Matrix.java -
+Matrix.java - A matrix interface that provides the client with matrix operations
 
-List.java -
+List.java - A list object ADT that allows operations on a doubly linked list
+of generic type objects
 
-MatrixTest.java -
+MatrixTest.java - Tests the Matrix client to make sure that all methods are working
+as described
 
-ListTest.java -
+ListTest.java - Tests the List client to make sure that all methods are working
+as described
 
-Makefile - 
+Makefile - Creates the executable file that runs the Sparse program
 
 Submitted by Spencer Albrecht (salbrech@ucsc.edu)
