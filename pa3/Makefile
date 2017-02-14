@@ -6,7 +6,7 @@
 #  jar file called Sparse.
 #------------------------------------------------------------------------------
 
-MAINCLASS  = MatrixTest
+MAINCLASS  = Sparse
 JAVAC      = javac
 JAVASRC    = $(wildcard *.java)
 SOURCES    = $(JAVASRC) makefile README

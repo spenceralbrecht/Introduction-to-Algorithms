@@ -45,7 +45,7 @@ public class Matrix {
       if (n<1) {
          throw new RuntimeException("Size must be greater than 0 in Matrix Constructor in Matrix.java");
       }
-      // Creates array of List elements
+      // Creates array of empty List elements
       this.rows = new List[n+1];
       this.size = n;
       this.numNonZero = 0;
@@ -71,6 +71,8 @@ public class Matrix {
       Matrix that;
       if(other instanceof Matrix){
          that = (Matrix) other;
+         // If the matrices don't have the same size or number
+         // of elements then return false
          if (this.getSize()!=that.getSize()) {
             return false;
          }
@@ -92,15 +94,16 @@ public class Matrix {
    }
 
    // Manipulation procedures
-   // sets this Matrix to the zero state
+   // Sets this Matrix to the zero state
    void makeZero() {
       this.size = 0;
       for(int i = 0; i < this.getSize()+1; i++) {
          this.rows[i+1].clear();
       }
+      this.numNonZero = 0;
    }
 
-   // returns a new Matrix having the same entries as this Matrix
+   // Returns a new Matrix having the same entries as this Matrix
    // Must use changeEntry()
    Matrix copy() {
       Matrix resultMatrix = new Matrix(this.getSize());
@@ -116,7 +119,7 @@ public class Matrix {
       return resultMatrix;
    }
 
-   // changes ith row, jth column of this Matrix to x
+   // Changes ith row, jth column of this Matrix to x
    // pre: 1<=i<=getSize(), 1<=j<=getSize()
    void changeEntry(int rowNum, int colNum, double insertValue) {
       if (rowNum<1) {
@@ -131,7 +134,7 @@ public class Matrix {
       if (colNum>this.getSize()) {
          throw new RuntimeException("Column number must be less than Matrix size in Matrix.java");
       }
-
+      // If the row doesn't have any elements we don't have to do anything
       if (this.rows[rowNum].length()>0) {
          this.rows[rowNum].moveFront();
          List currentList = this.rows[rowNum];
@@ -149,11 +152,11 @@ public class Matrix {
          double valueAtPosition = temp.value;
          int columnAtPosition = temp.column;
 
-         // Case 2
+         // If the columns are equal we just change the data value
          if (columnAtPosition==colNum) {
-            // Delete the Node if it is in the correct position
+            // Delete the Node if it is in the correct position and the
+            // value to be inserted is 0
             if (insertValue==0 && valueAtPosition!=0) {
-               // Delete the Node at the correct position
                this.rows[rowNum].delete();
                this.numNonZero--;
             }
@@ -163,12 +166,12 @@ public class Matrix {
             }
          }
          else {
+            // If the value to be inserted isn't 0
             if (insertValue!=0) {
                 Entry insertEntry = new Entry(colNum, insertValue);
                 this.rows[rowNum].insertAfter(insertEntry);
                 this.numNonZero++;
             }
-
          }
       }
       // List at row is empty
@@ -180,15 +183,14 @@ public class Matrix {
             this.numNonZero++;
          }
       }
-
-
    }
 
-   // returns a new Matrix that is the scalar product of this Matrix with x
+   // Returns a new Matrix that is the scalar product of this Matrix with x
    Matrix scalarMult(double scalar) {
       Matrix tempMatrix = new Matrix(this.getSize());
-      for (int i = 1; i < this.getSize(); i++) {
+      for (int i = 1; i <= this.getSize(); i++) {
          List currentList = this.rows[i];
+         // Only look as lists that aren't empty
          if (currentList.length()>0) {
             currentList.moveFront();
             // Loop that iterates through each list
@@ -203,16 +205,12 @@ public class Matrix {
    }
 
    List addList(List list, List secondList) {
-
        int totalElements = list.length()+secondList.length();
        List newList = new List();
        if (totalElements > 0) {
            // Create a copy of the list just in case the two lists are
            // actually the same list
            List firstList = list.copy();
-           //System.out.println("total elements = "+totalElements);
-           //System.out.println("first list = "+firstList.toString());
-           //System.out.println("second list = "+secondList.toString());
            int counter = 0;
            firstList.moveFront();
            secondList.moveFront();
@@ -220,7 +218,7 @@ public class Matrix {
            while (firstList.index()!=-1 && secondList.index()!=-1) {
                Entry entryOne = (Entry) firstList.get();
                Entry entryTwo = (Entry) secondList.get();
-               //System.out.println("index for both lists = "+firstList.index());
+               // If the columns are equal we add the values
                if (entryOne.column==entryTwo.column) {
                   double newValue = entryOne.value+entryTwo.value;
                   Entry newEntry = new Entry(entryOne.column, newValue);
@@ -228,19 +226,19 @@ public class Matrix {
                   firstList.moveNext();
                   secondList.moveNext();
               }
+              // If the first entry has a lower column than the second entry
+              // we add it to our new list
               else if (entryOne.column < entryTwo.column) {
-                 //System.out.println("line 222");
                  Entry newEntry = new Entry(entryOne.column, entryOne.value);
                  newList.append(newEntry);
                  firstList.moveNext();
-                 //counter++;
              }
+             // If the second entry has a lower column than the first entry
+             // we add it to our new list
              else {
-                 //System.out.println("line 229");
                  Entry newEntry = new Entry(entryTwo.column, entryTwo.value);
                  newList.append(newEntry);
                  secondList.moveNext();
-                 //counter++;
              }
            }
            // At this point one list will have no elements left
@@ -260,9 +258,7 @@ public class Matrix {
                     firstList.moveNext();
                }
            }
-           //System.out.println("new list = "+newList.toString());
        }
-
        return newList;
    }
    // returns a new Matrix that is the sum of this Matrix with M
@@ -275,8 +271,6 @@ public class Matrix {
       for (int i = 1; i < this.getSize()+1; i++) {
           List thisList = this.rows[i];
           List otherList = M.rows[i];
-          //System.out.println("this list = "+thisList.toString());
-          //System.out.println("other list = "+otherList.toString());
           List resultList = addList(thisList, otherList);
           resultList.moveFront();
           // Loops through the new list and adds the values to the new matrix
@@ -302,14 +296,13 @@ public class Matrix {
    // returns a new Matrix that is the transpose of this Matrix
    Matrix transpose() {
        Matrix resultMatrix = new Matrix(this.getSize());
-       for (int i = 1; i < this.getSize(); i++) {
+       for (int i = 1; i <= this.getSize(); i++) {
            this.rows[i].moveFront();
            for (int j = 0; j < this.rows[i].length(); j++) {
                Entry temp = (Entry) this.rows[i].get();
                resultMatrix.changeEntry(temp.column, i, temp.value);
                this.rows[i].moveNext();
            }
-
        }
        return resultMatrix;
    }
@@ -320,10 +313,12 @@ public class Matrix {
       double sum = 0.0;
       firstList.moveFront();
       secondList.moveFront();
+      // Only runs while both lists have elements
       while (firstList.index()!=-1 && secondList.index()!=-1) {
           Entry entryOne = (Entry) firstList.get();
           Entry entryTwo = (Entry) secondList.get();
-          //System.out.println("index for both lists = "+firstList.index());
+          // If the column's of the entries are equal multiply them
+          // and add them to the sum
           if (entryOne.column==entryTwo.column) {
              sum += entryOne.value*entryTwo.value;
              firstList.moveNext();
@@ -346,30 +341,22 @@ public class Matrix {
       }
       Matrix resultMatrix = new Matrix(this.getSize());
       Matrix transposed = M.transpose();
-      System.out.println("Transpose of B = ");
-      System.out.println(transposed);
-      for (int i = 1; i < this.getSize(); i++) {
+      // Loop that runs through the columns of the first matrix
+      for (int i = 1; i <= this.getSize(); i++) {
+         // Only looks through the the list if the length > 0
          if (this.rows[i].length()>0) {
-            for (int j = 1; j < transposed.getSize(); j++) {
+            for (int j = 1; j <= transposed.getSize(); j++) {
                int listOneSize = this.rows[i].length();
                int listTwoSize = transposed.rows[j].length();
-               //System.out.println("L1 size = "+listOneSize);
-               //System.out.println("L2 size = "+listTwoSize);
+               // If both lists have elements take the dot product and
+               // enter it into the correct place
                if (listOneSize>0 && listTwoSize>0) {
-                  //System.out.println("numElements for both rows"+numElements);
-                  //System.out.println("line 359");
                   double newValue = dot(this.rows[i],transposed.rows[j]);
                   resultMatrix.changeEntry(i, j, newValue);
                }
             }
          }
       }
-      // List one = this.rows[1];
-      // List two = M.rows[1];
-      // System.out.println("first list = "+one.toString());
-      // System.out.println("second list = "+two.toString());
-      // double dot = dot(this.rows[1],M.rows[1]);
-      // System.out.println(dot);
       return resultMatrix;
    }
 
@@ -377,13 +364,11 @@ public class Matrix {
    // overrides Object's toString() method
    public String toString() {
       String output = "";
-      //int iterator = 1;
-      for (int i = 1; i < this.getSize(); i++) {
+      for (int i = 1; i < this.getSize()+1; i++) {
          if (this.rows[i].length()>0) {
             output+=i+": "+this.rows[i].toString()+"\n";
          }
       }
       return output;
    }
-
 }
