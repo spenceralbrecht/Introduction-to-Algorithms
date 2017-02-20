@@ -2,23 +2,46 @@
 # Spencer Albrecht
 # salbrech
 # PA4 CS101
-# Makefile for CMPS 101 Programming Assignment 4
+#  Makefile for CMPS 101 Programming Assignment 4
 #
-#       make                   makes Lex
-#       make ListClient        makes ListClient
+#  make                     makes FindPath
+#  make GraphClient         makes GraphClient
+#  make clean               removes binaries
+#  make checkFind           tests FindPath for memory leaks on in3
+#  make checkClient         tests GraphClient for memory leaks
 #------------------------------------------------------------------------------
 
-GraphTest : Graph.o List.o
-	gcc -o GraphTest GraphTest.o
+BASE_SOURCES   = Graph.c List.c
+BASE_OBJECTS   = Graph.o List.o
+HEADERS        = Graph.h List.h
+COMPILE        = gcc -c -std=c99 -Wall
+LINK           = gcc -o
+REMOVE         = rm -f
+MEMCHECK       = valgrind --leak-check=full
 
-GraphTest.o : GraphTest.c
-	gcc -c -std=c99 -Wall GraphTest.c
+FindPath : FindPath.o $(BASE_OBJECTS)
+	$(LINK) FindPath FindPath.o $(BASE_OBJECTS)
 
-List.o : List.c List.h
-	gcc -c -std=c99 -Wall List.c
+GraphClient : GraphClient.o $(BASE_OBJECTS)
+	$(LINK) GraphClient GraphClient.o $(BASE_OBJECTS)
+
+FindPath.o : FindPath.c $(HEADERS)
+	$(COMPILE) FindPath.c
+
+GraphClient.o : GraphClient.c $(HEADERS)
+	$(COMPILE) GraphClient.c
+
+$(BASE_OBJECTS) : $(BASE_SOURCES) $(HEADERS)
+	$(COMPILE) $(BASE_SOURCES)
 
 clean :
-	rm -f GraphTest GraphTest.o
+	$(REMOVE) FindPath GraphClient FindPath.o GraphClient.o $(BASE_OBJECTS)
+
+checkFind : FindPath
+	$(MEMCHECK) FindPath in3 junk3
+
+checkClient : GraphClient
+	$(MEMCHECK) GraphClient
 
 submit:
 	submit cmps101-pt.w17 pa4 List.c List.h Graph.c Graph.h GraphTest.c FindPath.c Makefile README

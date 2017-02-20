@@ -27,9 +27,11 @@ int main(int argc, char const *argv[]) {
     Graph testGraph = newGraph(numInputs);
     int vertexOne, vertexTwo;
     sscanf(buffer, "%d %d", &vertexOne, &vertexTwo);
-    while(sscanf(buffer, "%d %d", &vertexOne, &vertexTwo)!=NULL && vertexOne) {
+    addEdge(vertexOne, vertexTwo);
+    while(sscanf(buffer, "%d %d", &vertexOne, &vertexTwo)!=NULL || (vertexOne!=0 && vertexTwo!=0)) {
         sscanf(buffer, "%d %d", &vertexOne, &vertexTwo);
         addEdge(vertexOne, vertexTwo);
     }
+    printGraph(fileOut, testGraph);
     return 0;
 }

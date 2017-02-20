@@ -122,7 +122,25 @@ int getDist(Graph G, int vertex) {
 
 /*** Manipulation procedures ***/
 void makeNull(Graph G);
-void addEdge(Graph G, int u, int v);
+void addEdge(Graph G, int vertexOne, int vertexTwo) {
+    // Add vertexTwo to adjacency list of vertexOne
+    List listOne = G->adjacent[vertexOne];
+    listOne.moveFront();
+    while (vertexTwo < listOne.get()) {
+        listOne.moveNext();
+    }
+    Node tempNode = newNode(vertexTwo);
+    listOne.insertAfter(tempNode);
+
+    // Add vertexOne to adjacency list of vertexTwo
+    List listTwo = G->adjacent[vertexTwo];
+    listTwo.moveFront();
+    while (vertexOne < listTwo.get()) {
+        listTwo.moveNext();
+    }
+    Node tempNode = newNode(vertexOne);
+    listTwo.insertAfter(tempNode);
+}
 void addArc(Graph G, int u, int v);
 
 void BFS(Graph G, int sourceVertex);
