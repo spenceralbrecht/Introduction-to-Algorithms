@@ -67,22 +67,70 @@ void freeGraph(Graph* pG) {
 }
 
 /*** Access functions ***/
+// Returns the order of the Graph
 int getOrder(Graph G) {
     return G->order;
 }
+// Returns the size of the Graph
 int getSize(Graph G) {
     return G->size;
 }
-int getSource(Graph G);
-int getParent(Graph G, int u);
-int getDist(Graph G, int u);
-void getPath(List L, Graph G, int u);
+// Returns source vertex most recently used
+int getSource(Graph G) {
+    return G->lastVertex;
+}
+// Returns the parent of the vertex if it exits
+// Precondition: 1<=vertex<=getOrder(G)
+int getParent(Graph G, int vertex) {
+    if (vertex < 1 || vertex > getOrder(G)) {
+        fprintf(stderr,
+        "getParent() must be passed a valid vertex in Graph.c\n");
+        exit(EXIT_FAILURE);
+    }
+    if (G->parent[vertex] == NIL) {
+        return NIL;
+    }
+    else {
+        return G->parent[vertex];
+    }
+}
+// Returns the distance from the most recent BFS source to the vertex
+// Precondition: 1<=vertex<=getOrder(G)
+int getDist(Graph G, int vertex) {
+    if (vertex < 1 || vertex > getOrder(G)) {
+        fprintf(stderr,
+        "getDist() must be passed a valid vertex in Graph.c\n");
+        exit(EXIT_FAILURE);
+    }
+    if (G->distance[vertex]!=NIL) {
+        return G->distance[vertex];
+    }
+    else {
+        return NIL;
+    }
+}
+// Appends to the List the vertices of the shortest path in G from the
+// source to the vertex
+// Precondition: getSource(G)!=NIL
+// void getPath(List L, Graph G, int vertex) {
+//     if (vertex < 1 || vertex > getOrder(G)) {
+//         fprintf(stderr,
+//         "getPath() must be passed a valid vertex in Graph.c\n");
+//         exit(EXIT_FAILURE);
+//     }
+// }
 
 /*** Manipulation procedures ***/
 void makeNull(Graph G);
 void addEdge(Graph G, int u, int v);
 void addArc(Graph G, int u, int v);
-void BFS(Graph G, int s);
+
+void BFS(Graph G, int sourceVertex);
 
 /*** Other operations ***/
-void printGraph(FILE* out, Graph G);
+void printGraph(FILE* out, Graph G) {
+    for (int i = 1; i <= G->order+1, i++) {
+        fprintf(out, "%d: ",i);
+        printList(out, G->adjacent[i]);
+    }
+}
