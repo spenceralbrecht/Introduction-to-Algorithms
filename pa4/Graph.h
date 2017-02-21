@@ -8,7 +8,7 @@
 #include "List.h"
 #define INF -1
 #define NIL -9
-typedef GraphObj* Graph;
+typedef struct GraphObj* Graph;
 /*** Constructors-Destructors ***/
 Graph newGraph(int n);
 void freeGraph(Graph* pG);

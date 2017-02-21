@@ -8,21 +8,27 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include "Graph.h"
+#define WHITE 1
+#define GREY 2
+#define BLACK 3
+
 // Definition of the GraphObj type
-typdef struct GraphObj {
+typedef struct GraphObj {
     int order;
     int size;
     int lastVertex;
-    List adjacent[size];
-    int color[order];
-    int parent[order];
-    int distance[size];
+    // Declaration of arrays
+    List *adjacent;
+    int *color;
+    int *parent;
+    int *distance;
 } GraphObj;
+
 
 /*** Constructors-Destructors ***/
 Graph newGraph(int n) {
     Graph tempGraph = (Graph) malloc(sizeof(GraphObj));
-    if (temp==NULL) {
+    if (tempGraph==NULL) {
         fprintf(stderr,
         "malloc() failed when trying to allocate for newGraph\n");
         exit(EXIT_FAILURE);
@@ -38,7 +44,7 @@ Graph newGraph(int n) {
 
     // Initialize the empty lists of the graph
     for(int i = 1; i <= tempGraph->order+1; i++) {
-      tempGraph->adj[i] = newList();
+      tempGraph->adjacent[i] = newList();
       tempGraph->color[i] = WHITE;
       tempGraph->distance[i] = INF;
       tempGraph->parent[i] = NIL;
@@ -124,22 +130,48 @@ int getDist(Graph G, int vertex) {
 void makeNull(Graph G);
 void addEdge(Graph G, int vertexOne, int vertexTwo) {
     // Add vertexTwo to adjacency list of vertexOne
+    printf("line 133\n");
+    //printf("v1 = %d", vertexOne);
+    //printf("v2 = %d", vertexTwo);
     List listOne = G->adjacent[vertexOne];
-    listOne.moveFront();
-    while (vertexTwo < listOne.get()) {
-        listOne.moveNext();
+    List listTwo = G->adjacent[vertexTwo];
+    printf("line 135\n");
+    // Insert the vertex in order
+    if (length(listOne) > 0) {
+        moveFront(listOne);
+        while (index(listOne)!=-1 && vertexTwo >= get(listOne)) {
+            moveNext(listOne);
+        }
+        if (index(listOne)!=-1) {
+            insertBefore(listOne, vertexTwo);
+        }
+        else {
+            append(listOne, vertexTwo);
+        }
+
+        printf("line 137\n");
     }
-    Node tempNode = newNode(vertexTwo);
-    listOne.insertAfter(tempNode);
+    else {
+        append(listOne, vertexTwo);
+    }
+
 
     // Add vertexOne to adjacency list of vertexTwo
-    List listTwo = G->adjacent[vertexTwo];
-    listTwo.moveFront();
-    while (vertexOne < listTwo.get()) {
-        listTwo.moveNext();
+    if (length(listTwo) > 0) {
+        moveFront(listTwo);
+        while (index(listTwo)!=-1 && vertexOne >= get(listTwo)) {
+            moveNext(listTwo);
+        }
+        if (index(listTwo)!=-1) {
+            insertBefore(listTwo, vertexOne);
+        }
+        else {
+            append(listTwo, vertexOne);
+        }
     }
-    Node tempNode = newNode(vertexOne);
-    listTwo.insertAfter(tempNode);
+    else {
+        append(listTwo, vertexOne);
+    }
 }
 void addArc(Graph G, int u, int v);
 
@@ -147,8 +179,9 @@ void BFS(Graph G, int sourceVertex);
 
 /*** Other operations ***/
 void printGraph(FILE* out, Graph G) {
-    for (int i = 1; i <= G->order+1, i++) {
+    for (int i = 1; i <= G->order; i++) {
         fprintf(out, "%d: ",i);
         printList(out, G->adjacent[i]);
+        fprintf(out,"\n");
     }
 }
