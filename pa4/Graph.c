@@ -118,24 +118,45 @@ int getDist(Graph G, int vertex) {
 // Appends to the List the vertices of the shortest path in G from the
 // source to the vertex
 // Precondition: getSource(G)!=NIL
-// void getPath(List L, Graph G, int vertex) {
-//     if (vertex < 1 || vertex > getOrder(G)) {
-//         fprintf(stderr,
-//         "getPath() must be passed a valid vertex in Graph.c\n");
-//         exit(EXIT_FAILURE);
-//     }
-// }
+void getPath(List L, Graph G, int terminus) {
+    if (terminus < 1 || terminus > getOrder(G)) {
+        fprintf(stderr,
+        "getPath() must be passed a valid vertex in Graph.c\n");
+        exit(EXIT_FAILURE);
+    }
+    if (getSource(G)==NIL) {
+        fprintf(stderr,
+        "getSource() must be called before getPath() in Graph.c\n");
+        exit(EXIT_FAILURE);
+    }
+    int vertex = G->lastVertex;
+    if (vertex==terminus) {
+        prepend(L,vertex);
+    }
+    else if (G->parent[terminus]==NIL) {
+        append(L,NIL);
+    }
+    else {
+        prepend(L,terminus);
+        getPath(L, G, G->parent[terminus]);
+    }
+}
 
 /*** Manipulation procedures ***/
-void makeNull(Graph G);
+void makeNull(Graph G) {
+    // Clear each adjacency list
+    for (int i = 1; i<=getOrder(G)+1; i++) {
+        clear(G->adjacent[i]);
+    }
+}
 void addEdge(Graph G, int vertexOne, int vertexTwo) {
     // Add vertexTwo to adjacency list of vertexOne
-    printf("line 133\n");
+    //printf("line 133\n");
     //printf("v1 = %d", vertexOne);
     //printf("v2 = %d", vertexTwo);
     List listOne = G->adjacent[vertexOne];
     List listTwo = G->adjacent[vertexTwo];
-    printf("line 135\n");
+    //printf("line 135\n");
     // Insert the vertex in order
     if (length(listOne) > 0) {
         moveFront(listOne);
@@ -149,7 +170,7 @@ void addEdge(Graph G, int vertexOne, int vertexTwo) {
             append(listOne, vertexTwo);
         }
 
-        printf("line 137\n");
+        //printf("line 137\n");
     }
     else {
         append(listOne, vertexTwo);
@@ -173,9 +194,52 @@ void addEdge(Graph G, int vertexOne, int vertexTwo) {
         append(listTwo, vertexOne);
     }
 }
-void addArc(Graph G, int u, int v);
+void addArc(Graph G, int vertexOne, int vertexTwo) {
+    List listOne = G->adjacent[vertexOne];
+    if (length(listOne) > 0) {
+        moveFront(listOne);
+        while (index(listOne)!=-1 && vertexTwo >= get(listOne)) {
+            moveNext(listOne);
+        }
+        if (index(listOne)!=-1) {
+            insertBefore(listOne, vertexTwo);
+        }
+        else {
+            append(listOne, vertexTwo);
+        }
+    }
+}
 
-void BFS(Graph G, int sourceVertex);
+void BFS(Graph G, int sourceVertex) {
+    for (int i = 1; i <= G->order+1; i++) {
+        G->parent[i] = NIL;
+        G->distance[i] = INF;
+        G->color[i] = WHITE;
+    }
+    G->lastVertex= sourceVertex;
+    G->color[sourceVertex] = GREY;
+    G->distance[sourceVertex] = 0;
+    List Queue = newList();
+    append(Queue, sourceVertex);
+    while (length(Queue)>0) {
+        moveFront(Queue);
+        sourceVertex = get(Queue);
+        deleteFront(Queue);
+        List adjacentList = G->adjacent[sourceVertex];
+        moveFront(adjacentList);
+        while (index(adjacentList)!=-1) {
+            int newVertex = get(adjacentList);
+            if (G->color[newVertex]==WHITE) {
+                G->color[newVertex] = GREY;
+                G->parent[newVertex] = sourceVertex;
+                G->distance[newVertex] = G->distance[sourceVertex]+1;
+                append(Queue, newVertex);
+            }
+            moveNext(adjacentList);
+        }
+    }
+
+}
 
 /*** Other operations ***/
 void printGraph(FILE* out, Graph G) {
