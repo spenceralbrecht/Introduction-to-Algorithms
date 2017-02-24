@@ -5,10 +5,10 @@
 #  Makefile for CMPS 101 Programming Assignment 4
 #
 #  make                     makes FindPath
-#  make GraphClient         makes GraphClient
+#  make GraphTest           makes GraphTest
 #  make clean               removes binaries
 #  make checkFind           tests FindPath for memory leaks on in3
-#  make checkClient         tests GraphClient for memory leaks
+#  make checkClient         tests GraphTest for memory leaks
 #------------------------------------------------------------------------------
 
 BASE_SOURCES   = Graph.c List.c GraphTest.c
@@ -40,8 +40,8 @@ clean :
 checkFind : FindPath
 	$(MEMCHECK) FindPath in1.txt o1.txt
 
-checkClient : GraphClient
-	$(MEMCHECK) GraphClient
+checkClient : GraphTest
+	$(MEMCHECK) GraphTest
 
 submit:
 	submit cmps101-pt.w17 pa4 List.c List.h Graph.c Graph.h GraphTest.c FindPath.c Makefile README

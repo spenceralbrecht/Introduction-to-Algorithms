@@ -4,10 +4,11 @@ List.c - Provides List ADT as well as private node class
 
 List.h - Header file that specifies which functions are accessible to client
 
-Graph.c -
+Graph.c - Implementation of the Graph ADT
 
-Graph.h -
+Graph.h - Header file that provides the public interface for the Graph ADT
 
-FindPath.c -
+FindPath.c - Takes in an input and output file and calculates the shortest paths
+between vertices within the input graph
 
-Makefile -
+Makefile - Makes the object files, links them, checks for memory leaks, and submits

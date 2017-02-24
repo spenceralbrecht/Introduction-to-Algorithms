@@ -53,6 +53,7 @@ Graph newGraph(int n) {
     return tempGraph;
 
 }
+// Frees all memory in a GraphObj
 void freeGraph(Graph* pG) {
     if(pG!=NULL && *pG!=NULL){
         /* free all heap memory associated with *pG */
@@ -130,12 +131,17 @@ void getPath(List L, Graph G, int terminus) {
         exit(EXIT_FAILURE);
     }
     int vertex = G->lastVertex;
+    // If the vertex we are at is the one we were trying to reach
     if (vertex==terminus) {
-        prepend(L,vertex);
+        prepend(L,terminus);
     }
+    // If the vertex we are trying to reach has no parent, it is unreachable
+    // and therefore the PATH is NIL
     else if (G->parent[terminus]==NIL) {
         append(L,NIL);
     }
+    // If the vertex we are at is along the path to the terminus add it to the
+    // list and then search the parent vertex
     else {
         prepend(L,terminus);
         getPath(L, G, G->parent[terminus]);
@@ -148,10 +154,11 @@ void makeNull(Graph G) {
     for (int i = 1; i<=getOrder(G)+1; i++) {
         clear(G->adjacent[i]);
     }
+    // Set the number of edges to zero
     G->size = 0;
 }
+// Adds an undirected edge between two vertices
 void addEdge(Graph G, int vertexOne, int vertexTwo) {
-    //printf("adding vertexOne = %d and vertexTwo = %d to graph\n", vertexOne, vertexTwo);
     // Add vertexTwo to adjacency list of vertexOne
     addArc(G, vertexOne, vertexTwo);
     // Add vertexOne to adjacency list of vertexTwo
@@ -159,63 +166,48 @@ void addEdge(Graph G, int vertexOne, int vertexTwo) {
     // Decrease the size by one because two edges were added by addArc
     G->size--;
 }
+// Adds a directed edge between two vertices
 void addArc(Graph G, int vertexOne, int vertexTwo) {
     List listOne = G->adjacent[vertexOne];
-    //printf("adding %d to adjacency list of %d\n", vertexTwo, vertexOne);
-    // if (length(listOne) > 0) {
-        moveFront(listOne);
-        while (index(listOne)!=-1 && vertexTwo >= get(listOne)) {
-            moveNext(listOne);
-        }
-        // If we haven't reached the end of the List
-        if (index(listOne)!=-1) {
-            insertBefore(listOne, vertexTwo);
-        }
-        // Append if vertexTwo is larger than all other vertices in the List
-        else {
-            append(listOne, vertexTwo);
-        }
-        //printf("adjacency list\n");
-        //printList(stdout, listOne);
-        //printf("\n");
-    // }
-    // else {
-    //     prepend(listOne, vertexTwo);
-    // }
+    moveFront(listOne);
+    // Move to the correct position in the list
+    while (index(listOne)!=-1 && vertexTwo >= get(listOne)) {
+        moveNext(listOne);
+    }
+    // If we haven't reached the end of the List
+    if (index(listOne)!=-1) {
+        insertBefore(listOne, vertexTwo);
+    }
+    // Append if vertexTwo is larger than all other vertices in the List
+    else {
+        append(listOne, vertexTwo);
+    }
     G->size++;
 }
-
+// Performs BFS on a Graph with a source vertex
 void BFS(Graph G, int sourceVertex) {
+    // Initialize all of the vertices
     for (int i = 1; i < G->order+1; i++) {
-        //printf("line 185 in BFS\n");
         G->parent[i] = NIL;
         G->distance[i] = INF;
         G->color[i] = WHITE;
     }
-    //printf("line 190 in BFS\n");
+    // Set the properties of the source vertex
     G->lastVertex = sourceVertex;
     G->color[sourceVertex] = GREY;
     G->distance[sourceVertex] = 0;
     List Queue = newList();
     append(Queue, sourceVertex);
-    //printf("line 196 in BFS\n");
+    // Discover vertices until all have been found
     while (length(Queue)>0) {
         moveFront(Queue);
         int vertex = get(Queue);
-        //printf("vertex = %d\n", vertex);
-
         deleteFront(Queue);
-        //printf("line 201 in BFS\n");
         List adjacentList = G->adjacent[vertex];
-        //printf("adjacentList length = %d\n", length(adjacentList));
-        //printf("adjacentList = \n");
-        //printList(stdout,adjacentList);
         moveFront(adjacentList);
         while (index(adjacentList)!=-1) {
-            //printf("line 205 in BFS\n");
-            //printf("index in adj list = %d\n", index(adjacentList));
             int adjVertex = get(adjacentList);
-            //printf("line 207 in BFS\n");
+            // Discover the vertex if it was undiscovered
             if (G->color[adjVertex]==WHITE) {
                 G->color[adjVertex] = GREY;
                 G->parent[adjVertex] = vertex;
@@ -231,8 +223,6 @@ void BFS(Graph G, int sourceVertex) {
 /*** Other operations ***/
 void printGraph(FILE* out, Graph G) {
     // Print the graph's adjacency list line by line
-    //printf("printing a graph\n");
-    //printf("G->order = %d\n", getOrder(G));
     for (int i = 1; i <= getOrder(G); i++) {
         fprintf(out, "%d: ",i);
         if (length(G->adjacent[i])>0) {

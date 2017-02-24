@@ -35,47 +35,34 @@ int main(int argc, char const *argv[]) {
 
     fgets(buffer, 100, fileIn);
     sscanf(buffer, "%d", &numInputs);
-    //printf("%d\n", numInputs);
+
     Graph testGraph = newGraph(numInputs);
     int vertexOne = 0;
     int vertexTwo = 0;
-    //fscanf(fileIn, "%d %d", &vertexOne, &vertexTwo);
-    //printf("Vertex One = %d Vertex Two = %d\n", vertexOne, vertexTwo);
-    //addEdge(testGraph,vertexOne, vertexTwo);
-    //printf("line 33\n");
-    while(fgets(buffer, 100, fileIn)!=NULL) {
-        //printf("line 34\n");
-        //int vertexOne = 0;
-        //int vertexTwo = 0;
-        //fscanf(fileIn, "%d %d", &vertexOne, &vertexTwo);
 
-        //printf("line 36\n");
+    // Scan each line as two ints and add them as edges to the graph
+    while(fgets(buffer, 100, fileIn)!=NULL) {
         sscanf(buffer, "%d %d", &vertexOne, &vertexTwo);
-        //printf("Vertex One = %d Vertex Two = %d\n", vertexOne, vertexTwo);
-        //printf("Vertex One = %d Vertex Two = %d\n", vertexOne, vertexTwo);
         if (vertexOne==0 && vertexTwo==0) {
             break;
         }
         addEdge(testGraph,vertexOne, vertexTwo);
-
     }
-    //printf("line 57 in FindPath");
+
     printGraph(fileOut, testGraph);
-    //printf("line 59 in FindPath");
     fprintf(fileOut,"\n");
 
     //Perform BFS on the list of source vertices
     while (fgets(buffer, 100, fileIn)!=NULL) {
         int sourceVertex, destinationVertex;
         sscanf(buffer, "%d %d", &sourceVertex, &destinationVertex);
-        //printf("sourceVertex = %d destinationVertex = %d\n", sourceVertex, destinationVertex);
+        // Don't run BFS on the indicator values
         if (sourceVertex==0 && destinationVertex==0) {
             break;
         }
-        //printf("\nline 75\n");
         BFS(testGraph, sourceVertex);
-        //printf("\nline 77\n");
         int distance = getDist(testGraph,destinationVertex);
+        // Print the output correctly to the file
         if (distance < 0 ) {
             fprintf(fileOut,"The distance from %d to %d is infinity\n",sourceVertex,destinationVertex);
             fprintf(fileOut,"No %d-%d path exists", sourceVertex, destinationVertex);
@@ -87,19 +74,14 @@ int main(int argc, char const *argv[]) {
             getPath(pathList,testGraph,destinationVertex);
             printList(fileOut, pathList);
             freeList(&pathList);
-            //moveFront(pathList);
-            //while(index(pathList)!=-1) {
-            //    fprintf(fileOut,"%d ",get(pathList));
-            //    moveNext(pathList);
-            //}  
         }
-        
         fprintf(fileOut,"\n\n");
     }
 
     freeGraph(&testGraph);
-	
-    fclose(fileIn);    
+
+    fclose(fileIn);
     fclose(fileOut);
+    
     return 0;
 }

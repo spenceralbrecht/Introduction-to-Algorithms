@@ -9,7 +9,7 @@
 #include<stdlib.h>
 #include "Graph.h"
 int main(int argc, char const *argv[]) {
-    /* code */
+    // Tests Graph.c
     Graph testGraph = newGraph(4);
     List testList = newList();
     addEdge(testGraph, 1, 2);
