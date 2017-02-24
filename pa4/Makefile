@@ -38,7 +38,7 @@ clean :
 	$(REMOVE) FindPath GraphTest FindPath.o GraphTest.o $(BASE_OBJECTS)
 
 checkFind : FindPath
-	$(MEMCHECK) FindPath in3 junk3
+	$(MEMCHECK) FindPath in1.txt o1.txt
 
 checkClient : GraphClient
 	$(MEMCHECK) GraphClient
