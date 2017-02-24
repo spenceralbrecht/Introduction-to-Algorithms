@@ -33,20 +33,25 @@ int main(int argc, char const *argv[]) {
         exit(1);
     }
 
-    fscanf(fileIn, "%d", &numInputs);
+    fgets(buffer, 100, fileIn);
+    sscanf(buffer, "%d", &numInputs);
     //printf("%d\n", numInputs);
     Graph testGraph = newGraph(numInputs);
-    int vertexOne, vertexTwo;
+    int vertexOne = 0;
+    int vertexTwo = 0;
     //fscanf(fileIn, "%d %d", &vertexOne, &vertexTwo);
     //printf("Vertex One = %d Vertex Two = %d\n", vertexOne, vertexTwo);
     //addEdge(testGraph,vertexOne, vertexTwo);
     //printf("line 33\n");
     while(fgets(buffer, 100, fileIn)!=NULL) {
         //printf("line 34\n");
+        //int vertexOne = 0;
+        //int vertexTwo = 0;
         //fscanf(fileIn, "%d %d", &vertexOne, &vertexTwo);
-        //printf("Vertex One = %d Vertex Two = %d\n", vertexOne, vertexTwo);
+
         //printf("line 36\n");
-        fscanf(fileIn, "%d %d", &vertexOne, &vertexTwo);
+        sscanf(buffer, "%d %d", &vertexOne, &vertexTwo);
+        //printf("Vertex One = %d Vertex Two = %d\n", vertexOne, vertexTwo);
         //printf("Vertex One = %d Vertex Two = %d\n", vertexOne, vertexTwo);
         if (vertexOne==0 && vertexTwo==0) {
             break;
@@ -54,29 +59,39 @@ int main(int argc, char const *argv[]) {
         addEdge(testGraph,vertexOne, vertexTwo);
 
     }
-    //printf("line 42");
+    //printf("line 57 in FindPath");
     printGraph(fileOut, testGraph);
+    //printf("line 59 in FindPath");
     fprintf(fileOut,"\n");
 
     //Perform BFS on the list of source vertices
     while (fgets(buffer, 100, fileIn)!=NULL) {
         int sourceVertex, destinationVertex;
-        fscanf(fileIn, "%d %d", &sourceVertex, &destinationVertex);
-        //printf("sourceVertex = %d destinationVertex = %d\n", sourceVertex, destinationVertex);
+        sscanf(buffer, "%d %d", &sourceVertex, &destinationVertex);
+        printf("sourceVertex = %d destinationVertex = %d\n", sourceVertex, destinationVertex);
         if (sourceVertex==0 && destinationVertex==0) {
             break;
         }
+        //printf("\nline 75\n");
         BFS(testGraph, sourceVertex);
+        //printf("\nline 77\n");
         int distance = getDist(testGraph,destinationVertex);
-        fprintf(fileOut,"The distance from %d to %d is %d\n",sourceVertex,destinationVertex,distance);
-        fprintf(fileOut,"A shortest %d-%d path is: ",sourceVertex,destinationVertex);
-        List pathList = newList();
-        getPath(pathList,testGraph,destinationVertex);
-        moveFront(pathList);
-        while(index(pathList)!=-1) {
-            fprintf(fileOut,"%d ",get(pathList));
-            moveNext(pathList);
+        if (distance < 0 ) {
+            fprintf(fileOut,"The distance from %d to %d is infinity\n",sourceVertex,destinationVertex);
+            fprintf(fileOut,"No %d-%d path exists", sourceVertex, destinationVertex);
         }
+        else {
+            fprintf(fileOut,"The distance from %d to %d is %d\n",sourceVertex,destinationVertex,distance);
+            fprintf(fileOut,"A shortest %d-%d path is: ",sourceVertex,destinationVertex);
+            List pathList = newList();
+            getPath(pathList,testGraph,destinationVertex);
+            moveFront(pathList);
+            while(index(pathList)!=-1) {
+                fprintf(fileOut,"%d ",get(pathList));
+                moveNext(pathList);
+            }
+        }
+
         fprintf(fileOut,"\n\n");
     }
 

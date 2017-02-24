@@ -216,49 +216,6 @@ void append(List L, int data) {
     L->length++;
 }
 
-// void insertInOrder(List L, int data) {
-//     Node temp = newNode(data);
-//     //printf("line 201\n");
-//     printf("length of list = %d\n",length(L));
-//     if (length(L) == 0) {
-//         printf("line 203\n");
-//         L->front = temp;
-//         L->back = temp;
-//     }
-//     else {
-//         printf("line 208\n");
-//         moveFront(L);
-//         printf("line 210\n");
-//         while (index(L)!=-1) {
-//             printf("index = %d",index(L));
-//             if (data >= get(L)) {
-//                 printf("data = %d, cursor element = %d\n", data, get(L));
-//                 moveNext(L);
-//                 printf("line 235\n");
-//             }
-//             else {
-//                 break;
-//             }
-//             //printf("after moveNext() index = %d and cursor element = %d\n", index(L),get(L));
-//             //printf("line 236\n");
-//         }
-//         // If the data was greater than everything on the list
-//         if (index(L)==-1) {
-//             printf("line 217\n");
-//             moveBack(L);
-//             printf("line 219\n");
-//             insertAfter(L, data);
-//             printf("line 221\n");
-//         }
-//         else {
-//             printf("line 224\n");
-//             insertBefore(L,data);
-//             printf("line 226\n");
-//         }
-//     }
-//     L->length++;
-// }
-
 // Insert new element before cursor.
 // Pre: length()>0, index()>=0
 void insertBefore(List L, int data) {
@@ -422,10 +379,15 @@ void delete(List L) {
 void printList(FILE* out, List L) {
     //out = fopen(out, "w");// "w" means that we are going to write on this file
     Node tracer = L->front;
+    //printf("line 382 in list.c\n");
     while(tracer!=NULL) {
+        //printf("line 384 in list.c\n");
         fprintf(out, "%d ", tracer->data);
+        //printf("line 386 in list.c\n");
         tracer = tracer->next;
+        //printf("line 388 in list.c\n");
     }
+    //printf("line 387 in list.c\n");
 }
 // Returns a new List representing the same integer sequence as this
 // List. The cursor in the new list is undefined, regardless of the

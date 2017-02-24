@@ -3,20 +3,28 @@
 // salbrech
 // PA4 CS101
 // GraphTest.c
-// Independently tests Graph interface
+// Independently tests Graph.c
 //-----------------------------------------------------------------------------
 #include<stdio.h>
-#include<stlib.h>
+#include<stdlib.h>
 #include "Graph.h"
 int main(int argc, char const *argv[]) {
     /* code */
-    // Graph testGraph = newGraph();
-    // List testList = newList();
+    Graph testGraph = newGraph(4);
+    addEdge(testGraph, 1, 2);
+    addEdge(testGraph, 1, 3);
+    addEdge(testGraph, 1, 4);
+    addEdge(testGraph, 2, 3);
+    addEdge(testGraph, 2, 4);
+    addEdge(testGraph, 3, 4);
 
-    // printf("getOrder = %d\n", getOrder(testGraph));
-    //
-    // printf("getSize = %d\n", getSize(testGraph));
-    //
+    printf("getOrder = %d\n", getOrder(testGraph));
+
+    printf("getSize = %d\n", getSize(testGraph));
+
+    printf("printGraph\n");
+    printGraph(stdout, testGraph);
+
     // printf("getSource = %d\n", getSource(testGraph));
     //
     // printf("getParent of 2 = %d\n", getParent(testGraph, 2));
@@ -40,9 +48,8 @@ int main(int argc, char const *argv[]) {
     //
     // printf("makeNull");
     // getPath(testGraph);
-    //
-    // printf("printGraph");
-    // getPath(testGraph);
+
+    freeGraph(&testGraph);
 
     return 0;
 }

@@ -36,7 +36,7 @@ Graph newGraph(int n) {
     // Initialize all fields
     tempGraph->order = n;
     tempGraph->size = 0;
-    tempGraph->lastVertex = 0;
+    tempGraph->lastVertex = NIL;
     tempGraph->adjacent = calloc(n+1, sizeof(List));
     tempGraph->color = calloc(n+1, sizeof(int));
     tempGraph->parent = calloc(n+1, sizeof(int));
@@ -59,14 +59,14 @@ void freeGraph(Graph* pG) {
         // Loop through the Graph and free each List
         Graph temp = *pG;
         for (int i = 0; i< (*pG)->order+1; i++) {
-            free(&(temp->adjacent[i]));
+            freeList(&(temp->adjacent[i]));
         }
         // Free the array now that it's lists have been freed
-        free(&temp->adjacent);
+        free(temp->adjacent);
         // Free each int array
-        free(&temp->color);
-        free(&temp->parent);
-        free(&temp->distance);
+        free(temp->color);
+        free(temp->parent);
+        free(temp->distance);
         free(*pG);
         *pG = NULL;
     }
@@ -148,102 +148,92 @@ void makeNull(Graph G) {
     for (int i = 1; i<=getOrder(G)+1; i++) {
         clear(G->adjacent[i]);
     }
+    G->size = 0;
 }
 void addEdge(Graph G, int vertexOne, int vertexTwo) {
+    //printf("adding vertexOne = %d and vertexTwo = %d to graph\n", vertexOne, vertexTwo);
     // Add vertexTwo to adjacency list of vertexOne
-    //printf("line 133\n");
-    //printf("v1 = %d", vertexOne);
-    //printf("v2 = %d", vertexTwo);
-    List listOne = G->adjacent[vertexOne];
-    List listTwo = G->adjacent[vertexTwo];
-    //printf("line 135\n");
-    // Insert the vertex in order
-    if (length(listOne) > 0) {
-        moveFront(listOne);
-        while (index(listOne)!=-1 && vertexTwo >= get(listOne)) {
-            moveNext(listOne);
-        }
-        if (index(listOne)!=-1) {
-            insertBefore(listOne, vertexTwo);
-        }
-        else {
-            append(listOne, vertexTwo);
-        }
-
-        //printf("line 137\n");
-    }
-    else {
-        append(listOne, vertexTwo);
-    }
-
-
+    addArc(G, vertexOne, vertexTwo);
     // Add vertexOne to adjacency list of vertexTwo
-    if (length(listTwo) > 0) {
-        moveFront(listTwo);
-        while (index(listTwo)!=-1 && vertexOne >= get(listTwo)) {
-            moveNext(listTwo);
-        }
-        if (index(listTwo)!=-1) {
-            insertBefore(listTwo, vertexOne);
-        }
-        else {
-            append(listTwo, vertexOne);
-        }
-    }
-    else {
-        append(listTwo, vertexOne);
-    }
+    addArc(G, vertexTwo, vertexOne);
+    // Decrease the size by one because two edges were added by addArc
+    G->size--;
 }
 void addArc(Graph G, int vertexOne, int vertexTwo) {
     List listOne = G->adjacent[vertexOne];
-    if (length(listOne) > 0) {
+    //printf("adding %d to adjacency list of %d\n", vertexTwo, vertexOne);
+    // if (length(listOne) > 0) {
         moveFront(listOne);
         while (index(listOne)!=-1 && vertexTwo >= get(listOne)) {
             moveNext(listOne);
         }
+        // If we haven't reached the end of the List
         if (index(listOne)!=-1) {
             insertBefore(listOne, vertexTwo);
         }
+        // Append if vertexTwo is larger than all other vertices in the List
         else {
             append(listOne, vertexTwo);
         }
-    }
+        //printf("adjacency list\n");
+        //printList(stdout, listOne);
+        //printf("\n");
+    // }
+    // else {
+    //     prepend(listOne, vertexTwo);
+    // }
+    G->size++;
 }
 
 void BFS(Graph G, int sourceVertex) {
-    for (int i = 1; i <= G->order+1; i++) {
+    for (int i = 1; i < G->order+1; i++) {
+        //printf("line 185 in BFS\n");
         G->parent[i] = NIL;
         G->distance[i] = INF;
         G->color[i] = WHITE;
     }
-    G->lastVertex= sourceVertex;
+    //printf("line 190 in BFS\n");
+    G->lastVertex = sourceVertex;
     G->color[sourceVertex] = GREY;
     G->distance[sourceVertex] = 0;
     List Queue = newList();
     append(Queue, sourceVertex);
+    //printf("line 196 in BFS\n");
     while (length(Queue)>0) {
         moveFront(Queue);
-        sourceVertex = get(Queue);
+        int vertex = get(Queue);
+        //printf("vertex = %d\n", vertex);
+
         deleteFront(Queue);
-        List adjacentList = G->adjacent[sourceVertex];
+        //printf("line 201 in BFS\n");
+        List adjacentList = G->adjacent[vertex];
+        //printf("adjacentList length = %d\n", length(adjacentList));
+        //printf("adjacentList = \n");
+        //printList(stdout,adjacentList);
         moveFront(adjacentList);
         while (index(adjacentList)!=-1) {
-            int newVertex = get(adjacentList);
-            if (G->color[newVertex]==WHITE) {
-                G->color[newVertex] = GREY;
-                G->parent[newVertex] = sourceVertex;
-                G->distance[newVertex] = G->distance[sourceVertex]+1;
-                append(Queue, newVertex);
+            //printf("line 205 in BFS\n");
+            //printf("index in adj list = %d\n", index(adjacentList));
+            int adjVertex = get(adjacentList);
+            //printf("line 207 in BFS\n");
+            if (G->color[adjVertex]==WHITE) {
+                G->color[adjVertex] = GREY;
+                G->parent[adjVertex] = vertex;
+                G->distance[adjVertex] = G->distance[vertex]+1;
+                append(Queue, adjVertex);
             }
             moveNext(adjacentList);
         }
     }
-
+    //freeList(&Queue);
 }
 
 /*** Other operations ***/
 void printGraph(FILE* out, Graph G) {
-    for (int i = 1; i <= G->order; i++) {
+    // Print the graph's adjacency list line by line
+    //printf("printing a graph\n");
+    //printf("G->order = %d\n", getOrder(G));
+    for (int i = 1; i <= getOrder(G); i++) {
         fprintf(out, "%d: ",i);
         printList(out, G->adjacent[i]);
         fprintf(out,"\n");
