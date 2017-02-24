@@ -5,6 +5,8 @@
 // List.h
 // Header file for List.c
 //-----------------------------------------------------------------------------
+#ifndef LIST_H
+#define LIST_H
 typedef struct ListObj* List;
 // Constructors-Destructors ---------------------------------------------------
 List newList(void);
@@ -33,3 +35,5 @@ void delete(List L);
 // Other operations -----------------------------------------------------------
 void printList(FILE* out, List L);
 List copyList(List L);
+
+#endif

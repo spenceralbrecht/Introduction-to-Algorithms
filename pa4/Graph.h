@@ -5,6 +5,9 @@
 // Graph.h
 // Provides Graph ADT for clients
 //-----------------------------------------------------------------------------
+#ifndef GRAPH_H
+#define GRAPH_H
+
 #include "List.h"
 #define INF -1
 #define NIL -2
@@ -29,3 +32,5 @@ void BFS(Graph G, int s);
 
 /*** Other operations ***/
 void printGraph(FILE* out, Graph G);
+
+#endif

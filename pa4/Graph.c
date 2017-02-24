@@ -235,7 +235,9 @@ void printGraph(FILE* out, Graph G) {
     //printf("G->order = %d\n", getOrder(G));
     for (int i = 1; i <= getOrder(G); i++) {
         fprintf(out, "%d: ",i);
-        printList(out, G->adjacent[i]);
+        if (length(G->adjacent[i])>0) {
+            printList(out, G->adjacent[i]);
+        }
         fprintf(out,"\n");
     }
 }

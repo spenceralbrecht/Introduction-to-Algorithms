@@ -68,7 +68,7 @@ int main(int argc, char const *argv[]) {
     while (fgets(buffer, 100, fileIn)!=NULL) {
         int sourceVertex, destinationVertex;
         sscanf(buffer, "%d %d", &sourceVertex, &destinationVertex);
-        printf("sourceVertex = %d destinationVertex = %d\n", sourceVertex, destinationVertex);
+        //printf("sourceVertex = %d destinationVertex = %d\n", sourceVertex, destinationVertex);
         if (sourceVertex==0 && destinationVertex==0) {
             break;
         }
