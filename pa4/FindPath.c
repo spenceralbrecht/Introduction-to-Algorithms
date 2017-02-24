@@ -85,15 +85,21 @@ int main(int argc, char const *argv[]) {
             fprintf(fileOut,"A shortest %d-%d path is: ",sourceVertex,destinationVertex);
             List pathList = newList();
             getPath(pathList,testGraph,destinationVertex);
-            moveFront(pathList);
-            while(index(pathList)!=-1) {
-                fprintf(fileOut,"%d ",get(pathList));
-                moveNext(pathList);
-            }
+            printList(fileOut, pathList);
+            freeList(&pathList);
+            //moveFront(pathList);
+            //while(index(pathList)!=-1) {
+            //    fprintf(fileOut,"%d ",get(pathList));
+            //    moveNext(pathList);
+            //}  
         }
-
+        
         fprintf(fileOut,"\n\n");
     }
 
+    freeGraph(&testGraph);
+	
+    fclose(fileIn);    
+    fclose(fileOut);
     return 0;
 }

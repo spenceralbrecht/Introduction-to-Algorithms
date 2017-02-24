@@ -43,7 +43,7 @@ Graph newGraph(int n) {
     tempGraph->distance = calloc(n+1, sizeof(int));
 
     // Initialize the empty lists of the graph
-    for(int i = 1; i <= tempGraph->order+1; i++) {
+    for(int i = 1; i < tempGraph->order+1; i++) {
       tempGraph->adjacent[i] = newList();
       tempGraph->color[i] = WHITE;
       tempGraph->distance[i] = INF;
@@ -58,7 +58,7 @@ void freeGraph(Graph* pG) {
         /* free all heap memory associated with *pG */
         // Loop through the Graph and free each List
         Graph temp = *pG;
-        for (int i = 0; i< (*pG)->order+1; i++) {
+        for (int i = 1; i< (*pG)->order+1; i++) {
             freeList(&(temp->adjacent[i]));
         }
         // Free the array now that it's lists have been freed
@@ -225,7 +225,7 @@ void BFS(Graph G, int sourceVertex) {
             moveNext(adjacentList);
         }
     }
-    //freeList(&Queue);
+    freeList(&Queue);
 }
 
 /*** Other operations ***/
