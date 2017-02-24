@@ -151,7 +151,7 @@ void getPath(List L, Graph G, int terminus) {
 /*** Manipulation procedures ***/
 void makeNull(Graph G) {
     // Clear each adjacency list
-    for (int i = 1; i<=getOrder(G)+1; i++) {
+    for (int i = 1; i<getOrder(G)+1; i++) {
         clear(G->adjacent[i]);
     }
     // Set the number of edges to zero

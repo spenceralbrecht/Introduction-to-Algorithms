@@ -12,8 +12,6 @@ int main(int argc, char const *argv[]) {
     // Tests Graph.c
     Graph testGraph = newGraph(4);
     List testList = newList();
-    addEdge(testGraph, 1, 2);
-    addEdge(testGraph, 1, 3);
     addEdge(testGraph, 1, 4);
     addEdge(testGraph, 2, 3);
     addEdge(testGraph, 2, 4);
@@ -31,7 +29,7 @@ int main(int argc, char const *argv[]) {
 
     printf("getSource = %d\n", getSource(testGraph));
 
-    printf("getParent of 2 = %d\n", getParent(testGraph, 2));
+    printf("getParent of 4 = %d\n", getParent(testGraph, 4));
 
     printf("getDist from 3 = %d\n", getDist(testGraph, 3));
 
@@ -43,7 +41,7 @@ int main(int argc, char const *argv[]) {
     addEdge(testGraph,1,2);
 
     printf("Running addArc\n");
-    addArc(testGraph,1,2);
+    addArc(testGraph,1,3);
 
     printf("Running makeNull\n");
     makeNull(testGraph);
@@ -54,7 +52,7 @@ int main(int argc, char const *argv[]) {
 
     printf("printGraph\n");
     printGraph(stdout, testGraph);
-
+    freeList(&testList);
     freeGraph(&testGraph);
 
     return 0;
