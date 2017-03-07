@@ -1,13 +1,13 @@
 #------------------------------------------------------------------------------
 # Spencer Albrecht
 # salbrech
-# PA4 CS101
-#  Makefile for CMPS 101 Programming Assignment 4
+# PA5 CS101
+#  Makefile for CMPS 101 Programming Assignment 5
 #
-#  make                     makes FindPath
+#  make                     makes FindComponents
 #  make GraphTest           makes GraphTest
 #  make clean               removes binaries
-#  make checkFind           tests FindPath for memory leaks on in3
+#  make checkFind           tests FindComponents for memory leaks on in1
 #  make checkClient         tests GraphTest for memory leaks
 #------------------------------------------------------------------------------
 
@@ -19,14 +19,14 @@ LINK           = gcc -o
 REMOVE         = rm -f
 MEMCHECK       = valgrind --leak-check=full
 
-FindPath : FindPath.o $(BASE_OBJECTS)
-	$(LINK) FindPath FindPath.o $(BASE_OBJECTS)
+FindComponents : FindComponents.o $(BASE_OBJECTS)
+	$(LINK) FindComponents FindComponents.o $(BASE_OBJECTS)
 
 GraphTest : GraphTest.o $(BASE_OBJECTS)
 	$(LINK) GraphTest GraphTest.o $(BASE_OBJECTS)
 
-FindPath.o : FindPath.c $(HEADERS)
-	$(COMPILE) FindPath.c
+FindComponents.o : FindComponents.c $(HEADERS)
+	$(COMPILE) FindComponents.c
 
 GraphClient.o : GraphClient.c $(HEADERS)
 	$(COMPILE) GraphClient.c
@@ -37,14 +37,14 @@ $(BASE_OBJECTS) : $(BASE_SOURCES) $(HEADERS)
 clean :
 	$(REMOVE) FindPath GraphTest FindPath.o GraphTest.o $(BASE_OBJECTS)
 
-checkFind : FindPath
-	$(MEMCHECK) FindPath in1.txt o1.txt
+checkFind : FindComponents
+	$(MEMCHECK) FindComponents in1.txt o1.txt
 
 checkClient : GraphTest
 	$(MEMCHECK) GraphTest
 
 submit:
-	submit cmps101-pt.w17 pa4 List.c List.h Graph.c Graph.h GraphTest.c FindPath.c Makefile README
+	submit cmps101-pt.w17 pa5 List.c List.h Graph.c Graph.h GraphTest.c FindComponents.c Makefile README
 
 check:
-	ls /afs/cats.ucsc.edu/class/cmps101-pt.w17/pa4/salbrech
+	ls /afs/cats.ucsc.edu/class/cmps101-pt.w17/pa5/salbrech
