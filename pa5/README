@@ -1,0 +1,15 @@
+Files submitted for Programming Assignment 5.
+
+List.c - Provides List ADT as well as private node class
+
+List.h - Header file that specifies which functions are accessible to client
+
+Graph.c - Implementation of the Graph ADT
+
+Graph.h - Header file that provides the public interface for the Graph ADT
+
+Makefile - Makes the object files, links them, checks for memory leaks, and submits
+
+GraphTest.c -
+
+FindComponents.c -
