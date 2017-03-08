@@ -48,6 +48,8 @@ int main(int argc, char const *argv[]) {
       }
       addArc(testGraph,vertexOne, vertexTwo);
    }
+
+   // Print out the adjacency list of the graph
    fprintf(fileOut,"Adjacency list representation of G:\n");
    printGraph(fileOut, testGraph);
    fprintf(fileOut,"\n");
@@ -57,35 +59,23 @@ int main(int argc, char const *argv[]) {
    for (int i = 1; i <= getOrder(testGraph); i++) {
       append(vertexOrder, i);
    }
-   //printf("list = ");
-   //printList(stdout, vertexOrder);
-   //printf("list size = %d\n", length(vertexOrder));
+
    DFS(testGraph, vertexOrder);
-   //printf("list size = %d\n", length(vertexOrder));
    Graph transposeGraph = transpose(testGraph);
    DFS(transposeGraph, vertexOrder);
-   //printf("line 65\n");
 
-
-   //fprintf(fileOut, "\n");
    moveFront(vertexOrder);
-   //printf("line 72\n");
    int SCCcount = 0;
-   //printf("line 74\n");
+   // Count the number of SCC's based on the number of NIL's
    while (index(vertexOrder)>-1) {
-      //printf("\nline 76\n");
       int vertex = get(vertexOrder);
-      //printf("line 78\n");
       if (getParent(transposeGraph, vertex)==NIL) {
-         //printf("line 80\n");
          SCCcount++;
       }
-      //printf("line 83\n");
       moveNext(vertexOrder);
    }
+
    fprintf(fileOut, "G contains %d strongly connected components:\n", SCCcount);
-   //fprintf(fileOut, "Vertex Order List = ");
-   //printList(fileOut, vertexOrder);
 
    int counter = 1;
    moveBack(vertexOrder);
@@ -110,9 +100,15 @@ int main(int argc, char const *argv[]) {
       // Print out the list of the SCC vertices
       fprintf(fileOut, "Component %d: ", counter);
       printList(fileOut, tempList);
+      freeList(&tempList);
       fprintf(fileOut,"\n");
-      //fprintf(fileOut,"after list\n");
       movePrev(vertexOrder);
       counter++;
    }
+   freeList(&vertexOrder);
+   freeGraph(&testGraph);
+   freeGraph(&transposeGraph);
+
+   fclose(fileIn);
+   fclose(fileOut);
 }

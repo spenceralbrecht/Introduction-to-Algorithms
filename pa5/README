@@ -10,6 +10,6 @@ Graph.h - Header file that provides the public interface for the Graph ADT
 
 Makefile - Makes the object files, links them, checks for memory leaks, and submits
 
-GraphTest.c -
+GraphTest.c - Tests the Graph ADT to make sure it functions properly
 
-FindComponents.c -
+FindComponents.c - Finds and prints the strongly connected components of a Graph

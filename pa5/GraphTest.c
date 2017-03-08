@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Spencer Albrecht
 // salbrech
-// PA4 CS101
+// PA5 CS101
 // GraphTest.c
 // Independently tests Graph.c
 //-----------------------------------------------------------------------------
@@ -10,50 +10,69 @@
 #include "Graph.h"
 int main(int argc, char const *argv[]) {
     // Tests Graph.c
-    Graph testGraph = newGraph(4);
+    int size = 5;
     List testList = newList();
-    addEdge(testGraph, 1, 4);
-    addEdge(testGraph, 2, 3);
-    addEdge(testGraph, 2, 4);
-    addEdge(testGraph, 3, 4);
+    Graph testGraph = newGraph(size);
 
-    printf("getOrder = %d\n", getOrder(testGraph));
+    for(int i = 1; i<=size; i++) append(testList, i);
 
-    printf("getSize = %d\n", getSize(testGraph));
-
-    printf("printGraph\n");
+    addArc(testGraph, 1,2);
+    addArc(testGraph, 1,5);
+    addArc(testGraph, 2,3);
+    addArc(testGraph, 2,5);
+    addArc(testGraph, 3,2);
+    addArc(testGraph, 3,4);
+    addArc(testGraph, 3,5);
+    addArc(testGraph, 4,2);
+    addArc(testGraph, 4,4);
+    addArc(testGraph, 5,1);
+    addArc(testGraph, 5,3);
     printGraph(stdout, testGraph);
 
-    printf("Running BFS\n");
-    BFS(testGraph,4);
+    DFS(testGraph, testList);
+    fprintf(stdout, "\n");
 
-    printf("getSource = %d\n", getSource(testGraph));
+    // Tests the getDiscover() function
+    fprintf(stdout, "getDiscover()\n");
+    fprintf(stdout, "%d\n", getDiscover(testGraph, 1));
 
-    printf("getParent of 4 = %d\n", getParent(testGraph, 4));
+    // Tests the getFinish() function
+    fprintf(stdout, "getFinish()\n");
+    fprintf(stdout, "%d\n", getFinish(testGraph, 2));
 
-    printf("getDist from 3 = %d\n", getDist(testGraph, 3));
+    // Tests the getParent() function
+    fprintf(stdout, "getParent()\n");
+    fprintf(stdout, "%d\n", getParent(testGraph, 3));
 
-    printf("getPath = ");
-    getPath(testList,testGraph,4);
-    printList(stdout, testList);
+    Graph transposeGraph = transpose(testGraph);
+    Graph copy  = copyGraph(testGraph);
 
-    printf("\nRunning addEdge\n");
-    addEdge(testGraph,1,2);
+    fprintf(stdout, "Copy of Graph = \n");
+    printGraph(stdout, copy);
+    fprintf(stdout, "\n");
 
-    printf("Running addArc\n");
-    addArc(testGraph,1,3);
+    fprintf(stdout, "Transpose of Graph\n");
+    printGraph(stdout, transposeGraph);
+    fprintf(stdout, "\n");
 
-    printf("Running makeNull\n");
-    makeNull(testGraph);
+    DFS(transposeGraph, testList);
+    fprintf(stdout, "\n");
 
-    printf("getOrder = %d\n", getOrder(testGraph));
+    // Tests the getDiscover() function
+    fprintf(stdout, "getDiscover()\n");
+    fprintf(stdout, "%d\n", getDiscover(transposeGraph, 3));
 
-    printf("getSize = %d\n", getSize(testGraph));
+    // Tests the getFinish() function
+    fprintf(stdout, "getFinish()\n");
+    fprintf(stdout, "%d\n", getFinish(transposeGraph, 4));
 
-    printf("printGraph\n");
-    printGraph(stdout, testGraph);
+    // Tests the getParent() function
+    fprintf(stdout, "getParent()\n");
+    fprintf(stdout, "%d\n", getParent(transposeGraph, 5));
+
     freeList(&testList);
     freeGraph(&testGraph);
-
-    return 0;
+    freeGraph(&transposeGraph);
+    freeGraph(&copy);
+    return(0);
 }
