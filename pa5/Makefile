@@ -4,7 +4,7 @@
 #  make                     makes FindComponents
 #  make GraphTest           makes GraphTest
 #  make clean               removes binaries
-#  make checkFind           tests FindComponents for memory leaks on in3
+#  make checkFind           tests FindComponents for memory leaks on in1
 #  make checkClient         tests GraphClient for memory leaks
 #------------------------------------------------------------------------------
 
@@ -35,13 +35,13 @@ clean :
 	$(REMOVE) FindComponents GraphTest FindComponents.o GraphTest.o $(BASE_OBJECTS)
 
 checkFind : FindComponents
-	$(MEMCHECK) FindComponents in3 junk3
+	$(MEMCHECK) FindComponents in1.txt o1.txt
 
 checkTest : GraphTest
 	$(MEMCHECK) GraphTest
 
 submit:
-	submit cmps101-pt.w17 pa4 List.c List.h Graph.c Graph.h GraphTest.c FindComponents.c Makefile README
+	submit cmps101-pt.w17 pa5 List.c List.h Graph.c Graph.h GraphTest.c FindComponents.c Makefile README
 
 check:
 	ls /afs/cats.ucsc.edu/class/cmps101-pt.w17/pa5/salbrech

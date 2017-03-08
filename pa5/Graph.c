@@ -113,24 +113,25 @@ void DFS(Graph G, List vertexOrder) {
       G->color[i] = WHITE;
       G->discoverTime[i] = NIL;
    }
-   int* time = malloc(sizeof(int));
+   int time = 0;
+   //int* time = malloc(sizeof(int));
    // Make sure malloc was able to be performed
-   if (time==NULL) {
-      fprintf(stderr,
-      "malloc() failed when allocating for time in Graph.c\n");
-      exit(EXIT_FAILURE);
-   }
-   *time = 0;
+   //if (time==NULL) {
+   //   fprintf(stderr,
+   //   "malloc() failed when allocating for time in Graph.c\n");
+   //   exit(EXIT_FAILURE);
+   //}
+   //*time = 0;
+   //int time = 0;
    moveFront(vertexOrder);
    // Call DFS_VISIT based on the vertexOrder list
    while (index(vertexOrder)>-1) {
       int vertex = get(vertexOrder);
       if (G->color[vertex]==WHITE) {
-         DFS_VISIT(G, vertexOrder, vertex, time);
+         DFS_VISIT(G, vertexOrder, vertex, &time);
       }
       moveNext(vertexOrder);
    }
-
    // After DFS has finished, delete the back half of the vertexOrder
    // list because we appended all of the correct values to the beginning
    int newLength = length(vertexOrder)/2;
