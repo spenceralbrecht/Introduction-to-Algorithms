@@ -74,7 +74,7 @@ int length(List L) {
 // If cursor is defined, returns the index of the cursor element,
 // otherwise returns -1.
 int index(List L) {
-    return L->cursorIndex;
+   return L->cursorIndex;
 }
 // Returns front element. Pre: length()>0
 int front(List L) {

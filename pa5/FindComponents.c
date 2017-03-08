@@ -51,4 +51,68 @@ int main(int argc, char const *argv[]) {
    fprintf(fileOut,"Adjacency list representation of G:\n");
    printGraph(fileOut, testGraph);
    fprintf(fileOut,"\n");
+
+   List vertexOrder = newList();
+   // Initialize the vertexOrder to the convention for the first DFS call
+   for (int i = 1; i <= getOrder(testGraph); i++) {
+      append(vertexOrder, i);
+   }
+   //printf("list = ");
+   //printList(stdout, vertexOrder);
+   //printf("list size = %d\n", length(vertexOrder));
+   DFS(testGraph, vertexOrder);
+   //printf("list size = %d\n", length(vertexOrder));
+   Graph transposeGraph = transpose(testGraph);
+   DFS(transposeGraph, vertexOrder);
+   //printf("line 65\n");
+
+
+   //fprintf(fileOut, "\n");
+   moveFront(vertexOrder);
+   //printf("line 72\n");
+   int SCCcount = 0;
+   //printf("line 74\n");
+   while (index(vertexOrder)>-1) {
+      //printf("\nline 76\n");
+      int vertex = get(vertexOrder);
+      //printf("line 78\n");
+      if (getParent(transposeGraph, vertex)==NIL) {
+         //printf("line 80\n");
+         SCCcount++;
+      }
+      //printf("line 83\n");
+      moveNext(vertexOrder);
+   }
+   fprintf(fileOut, "G contains %d strongly connected components:\n", SCCcount);
+   //fprintf(fileOut, "Vertex Order List = ");
+   //printList(fileOut, vertexOrder);
+
+   int counter = 1;
+   moveBack(vertexOrder);
+   while (index(vertexOrder)>-1) {
+      int vertex = get(vertexOrder);
+      List tempList = newList();
+      //printf("line 93\n");
+      if (index(vertexOrder)>-1) {
+         if (getParent(transposeGraph, vertex)==NIL) {
+            append(tempList, vertex);
+         }
+         else {
+            while (index(vertexOrder)>-1 && getParent(transposeGraph, get(vertexOrder))!=NIL) {
+               prepend(tempList,vertex);
+               movePrev(vertexOrder);
+               vertex = get(vertexOrder);
+            }
+            // Add the first vertex of the SCC to the front of the list
+            prepend(tempList, vertex);
+         }
+      }
+      // Print out the list of the SCC vertices
+      fprintf(fileOut, "Component %d: ", counter);
+      printList(fileOut, tempList);
+      fprintf(fileOut,"\n");
+      //fprintf(fileOut,"after list\n");
+      movePrev(vertexOrder);
+      counter++;
+   }
 }
