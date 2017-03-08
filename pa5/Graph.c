@@ -80,7 +80,7 @@ void freeGraph(Graph* pG) {
 // Returns the discover time of a vertex
 // Pre: 1<=u<=n=getOrder(G)
 int getDiscover(Graph G, int u) {
-   if (u<1 || u>n || n!=getOrder(G)) {
+   if (u<1 || u>getOrder(G)) {
       printf("getDiscover() in Graph.c cannot be called without a matching list size\n");
       exit(1);
    }
@@ -89,7 +89,7 @@ int getDiscover(Graph G, int u) {
 // Returns the finish time of a vertex
 // Pre: 1<=u<=n=getOrder(G)
 int getFinish(Graph G, int u) {
-   if (u<1 || u>n || n!=getOrder(G)) {
+   if (u<1 || u>getOrder(G)) {
       printf("getFinish() in Graph.c cannot be called without a matching list size\n");
       exit(1);
    }
@@ -99,7 +99,9 @@ int getFinish(Graph G, int u) {
 int getOrder(Graph G) {
     return G->order;
 }
-/* Pre: length(S)==getOrder(G) */
+void DFS_VISIT(Graph G, List vertexOrder, int vertex, int* time);
+// Runs DFS on a Graph G in the order of the list provided
+// Pre: length(S)==getOrder(G)
 void DFS(Graph G, List vertexOrder) {
    if (length(vertexOrder) != getOrder(G)) {
       fprintf(stderr,
@@ -119,39 +121,39 @@ void DFS(Graph G, List vertexOrder) {
       exit(EXIT_FAILURE);
    }
    *time = 0;
-   vertexOrder.moveFront();
+   moveFront(vertexOrder);
    // Call DFS_VISIT based on the vertexOrder list
-   while (vertexOrder.index()>-1) {
-      int vertex = vertexOrder.get();
+   while (index(vertexOrder)>-1) {
+      int vertex = get(vertexOrder);
       if (G->color[vertex]==WHITE) {
-         DFS_VISIT(G, vertexOrder, vertex, &time);
+         DFS_VISIT(G, vertexOrder, vertex, time);
       }
+      moveNext(vertexOrder);
    }
-   vertexOrder.moveNext();
 
    // After DFS has finished, delete the back half of the vertexOrder
    // list because we appended all of the correct values to the beginning
-   int newLength = getOrder(G)/2;
+   int newLength = length(vertexOrder)/2;
    for(int i = 0; i < newLength; i++) {
-       deleteBack(S);
+       deleteBack(vertexOrder);
    }
 }
 
 void DFS_VISIT(Graph G, List vertexOrder, int vertex, int* time) {
    (*time)++;
    G->discoverTime[vertex] = *time;
-   G->color[vertex] = GRAY;
+   G->color[vertex] = GREY;
    List adjacentList = G->adjacent[vertex];
-   adjacentList.moveFront();
+   moveFront(adjacentList);
    // Go through the adjacency list of the current vertex
-   while (adjacentList.index()>-1) {
-      int adjacentVertex = adjacentList.get();
+   while (index(adjacentList)>-1) {
+      int adjacentVertex = get(adjacentList);
       if (G->color[adjacentVertex]==WHITE) {
          // Set the parent of the adjacent vertex to the current vertex
          G->parent[adjacentVertex] = vertex;
-         DFS_VISIT(G,vertexOrder,adjacentVertex,&time);
+         DFS_VISIT(G,vertexOrder,adjacentVertex,time);
       }
-      adjacentList.moveNext();
+      moveNext(adjacentList);
    }
    G->color[vertex] = BLACK;
    // Prepend vertices to the list so that the list ends up with
@@ -164,21 +166,34 @@ void DFS_VISIT(Graph G, List vertexOrder, int vertex, int* time) {
 // Returns the transpose of a graph
 Graph transpose(Graph G) {
    Graph tempGraph = newGraph(getOrder(G));
-   int length = getOrder(G);
-   for (int i = 1; i <= length; i++) {
+   int len = getOrder(G);
+   for (int i = 1; i <= len; i++) {
+      if (length(G->adjacent[i])>0) {
+         List tempList = G->adjacent[i];
+         moveFront(tempList);
+         while (index(tempList)>-1) {
+            int vertex = get(tempList);
+            // Add the main vertex to the adjacency list of the adjacent vertex
+            append(tempGraph->adjacent[vertex], i);
+            moveNext(tempList);
+         }
+      }
+   }
+   return tempGraph;
 }
 // Returns copy a graph
 Graph copyGraph(Graph G) {
-   Graph tempGraph = newGraph(getOrder(G));
+   Graph graphCopy = newGraph(getOrder(G));
    int length = getOrder(G);
    for (int i = 1; i <= length; i++) {
-      List tempList = G->adjacent[i];
-      tempList.moveFront();
-      while(index(tempList)>-1) {
-         append(tempGraph->adjacent[i], tempList.get());
-         tempList.moveNext();
-         }
+      List adjacencyList = G->adjacent[i];
+      moveFront(adjacencyList);
+      while(index(adjacencyList)>-1) {
+         append(graphCopy->adjacent[i], get(adjacencyList));
+         moveNext(adjacencyList);
+      }
    }
+   return graphCopy;
 }
 // Returns the size of the Graph
 int getSize(Graph G) {
