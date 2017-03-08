@@ -45,7 +45,9 @@ Graph newGraph(int n) {
 
     // Initialize the empty lists of the graph
     for(int i = 1; i < tempGraph->order+1; i++) {
+      // Create an empty list for each adjacency list
       tempGraph->adjacent[i] = newList();
+      // Initialize all other values properly
       tempGraph->discoverTime[i] = UNDEF;
       tempGraph->finishTime[i] = UNDEF;
       tempGraph->color[i] = WHITE;
@@ -57,12 +59,12 @@ Graph newGraph(int n) {
 void freeGraph(Graph* pG) {
     if(pG!=NULL && *pG!=NULL){
         /* free all heap memory associated with *pG */
-        // Loop through the Graph and free each List
+        // Loop through adjacent array and clear each list
         Graph temp = *pG;
         for (int i = 1; i< (*pG)->order+1; i++) {
             freeList(&(temp->adjacent[i]));
         }
-        // Free the array now that it's lists have been freed
+        // Free the array now that the inner lists have been freed
         free(temp->adjacent);
         // Free each int array
         free(temp->color);
@@ -75,18 +77,20 @@ void freeGraph(Graph* pG) {
 }
 
 /*** Access functions ***/
-/* Pre: 1<=u<=n=getOrder(G) */
+// Returns the discover time of a vertex
+// Pre: 1<=u<=n=getOrder(G)
 int getDiscover(Graph G, int u) {
    if (u<1 || u>n || n!=getOrder(G)) {
-      printf("DFS() in Graph.c cannot be called without a matching list size\n");
+      printf("getDiscover() in Graph.c cannot be called without a matching list size\n");
       exit(1);
    }
    return G->discoverTime[u];
 }
-/* Pre: 1<=u<=n=getOrder(G) */
+// Returns the finish time of a vertex
+// Pre: 1<=u<=n=getOrder(G)
 int getFinish(Graph G, int u) {
    if (u<1 || u>n || n!=getOrder(G)) {
-      printf("DFS() in Graph.c cannot be called without a matching list size\n");
+      printf("getFinish() in Graph.c cannot be called without a matching list size\n");
       exit(1);
    }
    return G->finishTime[u];
@@ -96,112 +100,94 @@ int getOrder(Graph G) {
     return G->order;
 }
 /* Pre: length(S)==getOrder(G) */
-void DFS(Graph G, List S) {
-   if (length(S) != getOrder(G)) {
+void DFS(Graph G, List vertexOrder) {
+   if (length(vertexOrder) != getOrder(G)) {
       fprintf(stderr,
       "DFS() in Graph.c cannot be called without a matching list size\n");
       exit(EXIT_FAILURE);
    }
+   // Initialize the vertices of G
    for (int i = 1; i <=getOrder(G); i++) {
       G->color[i] = WHITE;
       G->discoverTime[i] = NIL;
    }
    int* time = malloc(sizeof(int));
+   // Make sure malloc was able to be performed
    if (time==NULL) {
       fprintf(stderr,
       "malloc() failed when allocating for time in Graph.c\n");
       exit(EXIT_FAILURE);
    }
    *time = 0;
-   S.moveFront();
-   while (S.index()>-1) {
-      int vertex = S.get();
-      if (G->color[vertex]==WHITE {
-         DFS_VISIT(G, S, vertex, &time);
+   vertexOrder.moveFront();
+   // Call DFS_VISIT based on the vertexOrder list
+   while (vertexOrder.index()>-1) {
+      int vertex = vertexOrder.get();
+      if (G->color[vertex]==WHITE) {
+         DFS_VISIT(G, vertexOrder, vertex, &time);
       }
    }
-   S.moveNext();
+   vertexOrder.moveNext();
 
-   // Delete the back half of the list that you don't need
+   // After DFS has finished, delete the back half of the vertexOrder
+   // list because we appended all of the correct values to the beginning
    int newLength = getOrder(G)/2;
    for(int i = 0; i < newLength; i++) {
        deleteBack(S);
    }
 }
 
-void DFS_VISIT(Graph G, List l, int vertex, int* time) {
+void DFS_VISIT(Graph G, List vertexOrder, int vertex, int* time) {
    (*time)++;
    G->discoverTime[vertex] = *time;
    G->color[vertex] = GRAY;
    List adjacentList = G->adjacent[vertex];
    adjacentList.moveFront();
+   // Go through the adjacency list of the current vertex
    while (adjacentList.index()>-1) {
       int adjacentVertex = adjacentList.get();
       if (G->color[adjacentVertex]==WHITE) {
+         // Set the parent of the adjacent vertex to the current vertex
          G->parent[adjacentVertex] = vertex;
-         DFS_VISIT(G,list,adjacentVertex,&time);
+         DFS_VISIT(G,vertexOrder,adjacentVertex,&time);
       }
       adjacentList.moveNext();
    }
    G->color[vertex] = BLACK;
-   prepend(l, vertex);
+   // Prepend vertices to the list so that the list ends up with
+   // vertices in order of decreasing finish times
+   prepend(vertexOrder, vertex);
    (*time)++;
    G->finishTime[vertex] = *time;
 }
-   // for(int i = 1; i <= getOrder(G); ++i) {
-   //    G->color[i] = WHITE;
-   //    G->parent[i] = NIL;
-   //    G->discover[i] = UNDEF;
-   //    G->finish[i] = UNDEF;
-   // }
-   // int time = 0;
-   // moveFront(S);
-   // while(index(S) >= 0) {
-   //    int u = get(S);
-   //    if(G->color[u] == WHITE) {
-   //       Visit(G, S, u, &time);
-   //    }
-   //    moveNext(S);
-   // }
-   //
-   // for(int size = length(S)/2; size > 0; --size) {
-   //    deleteBack(S);
-   // }
-   // DFS.G/
-   // 1 for each vertex u 2 G:V
-   // 2 u:color D WHITE
-   // 3 u: D NIL
-   // 4 time D 0
-   // 5 for each vertex u 2 G:V
-   // 6 if u:color = = WHITE
-   // 7 DFS-VISIT.G; u/
-   // DFS-VISIT.G; u/
-   // 1 time D time C 1 // white vertex u has just been discovered
-   // 2 u:d D time
-   // 3 u:color D GRAY
-   // 4 for each  2 G:AdjŒu // explore edge .u; /
-   // 5 if :color == WHITE
-   // 6 : D u
-   // 7 DFS-VISIT.G; /
-   // 8 u:color D BLACK // blacken u; it is finished
-   // 9 time D time C 1
-   // 10 u:f D time
+
 // Returns the transpose of a graph
 Graph transpose(Graph G) {
-
+   Graph tempGraph = newGraph(getOrder(G));
+   int length = getOrder(G);
+   for (int i = 1; i <= length; i++) {
 }
 // Returns copy a graph
 Graph copyGraph(Graph G) {
-
+   Graph tempGraph = newGraph(getOrder(G));
+   int length = getOrder(G);
+   for (int i = 1; i <= length; i++) {
+      List tempList = G->adjacent[i];
+      tempList.moveFront();
+      while(index(tempList)>-1) {
+         append(tempGraph->adjacent[i], tempList.get());
+         tempList.moveNext();
+         }
+   }
 }
 // Returns the size of the Graph
 int getSize(Graph G) {
     return G->size;
 }
 // Returns source vertex most recently used
-int getSource(Graph G) {
-    return G->lastVertex;
-}
+// int getSource(Graph G) {
+//     return G->lastVertex;
+// }
 // Returns the parent of the vertex if it exits
 // Precondition: 1<=vertex<=getOrder(G)
 int getParent(Graph G, int vertex) {
@@ -215,6 +201,45 @@ int getParent(Graph G, int vertex) {
     }
     else {
         return G->parent[vertex];
+    }
+}
+// Adds an undirected edge between two vertices
+void addEdge(Graph G, int vertexOne, int vertexTwo) {
+    // Add vertexTwo to adjacency list of vertexOne
+    addArc(G, vertexOne, vertexTwo);
+    // Add vertexOne to adjacency list of vertexTwo
+    addArc(G, vertexTwo, vertexOne);
+    // Decrease the size by one because two edges were added by addArc
+    G->size--;
+}
+// Adds a directed edge between two vertices
+void addArc(Graph G, int vertexOne, int vertexTwo) {
+    List listOne = G->adjacent[vertexOne];
+    moveFront(listOne);
+    // Move to the correct position in the list
+    while (index(listOne)!=-1 && vertexTwo >= get(listOne)) {
+        moveNext(listOne);
+    }
+    // If we haven't reached the end of the List
+    if (index(listOne)!=-1) {
+        insertBefore(listOne, vertexTwo);
+    }
+    // Append if vertexTwo is larger than all other vertices in the List
+    else {
+        append(listOne, vertexTwo);
+    }
+    G->size++;
+}
+
+/*** Other operations ***/
+void printGraph(FILE* out, Graph G) {
+    // Print the graph's adjacency list line by line
+    for (int i = 1; i <= getOrder(G); i++) {
+        fprintf(out, "%d: ",i);
+        if (length(G->adjacent[i])>0) {
+            printList(out, G->adjacent[i]);
+        }
+        fprintf(out,"\n");
     }
 }
 // Returns the distance from the most recent BFS source to the vertex
@@ -273,42 +298,3 @@ int getParent(Graph G, int vertex) {
 //     // Set the number of edges to zero
 //     G->size = 0;
 // }
-// Adds an undirected edge between two vertices
-void addEdge(Graph G, int vertexOne, int vertexTwo) {
-    // Add vertexTwo to adjacency list of vertexOne
-    addArc(G, vertexOne, vertexTwo);
-    // Add vertexOne to adjacency list of vertexTwo
-    addArc(G, vertexTwo, vertexOne);
-    // Decrease the size by one because two edges were added by addArc
-    G->size--;
-}
-// Adds a directed edge between two vertices
-void addArc(Graph G, int vertexOne, int vertexTwo) {
-    List listOne = G->adjacent[vertexOne];
-    moveFront(listOne);
-    // Move to the correct position in the list
-    while (index(listOne)!=-1 && vertexTwo >= get(listOne)) {
-        moveNext(listOne);
-    }
-    // If we haven't reached the end of the List
-    if (index(listOne)!=-1) {
-        insertBefore(listOne, vertexTwo);
-    }
-    // Append if vertexTwo is larger than all other vertices in the List
-    else {
-        append(listOne, vertexTwo);
-    }
-    G->size++;
-}
-
-/*** Other operations ***/
-void printGraph(FILE* out, Graph G) {
-    // Print the graph's adjacency list line by line
-    for (int i = 1; i <= getOrder(G); i++) {
-        fprintf(out, "%d: ",i);
-        if (length(G->adjacent[i])>0) {
-            printList(out, G->adjacent[i]);
-        }
-        fprintf(out,"\n");
-    }
-}
