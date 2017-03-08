@@ -114,15 +114,6 @@ void DFS(Graph G, List vertexOrder) {
       G->discoverTime[i] = NIL;
    }
    int time = 0;
-   //int* time = malloc(sizeof(int));
-   // Make sure malloc was able to be performed
-   //if (time==NULL) {
-   //   fprintf(stderr,
-   //   "malloc() failed when allocating for time in Graph.c\n");
-   //   exit(EXIT_FAILURE);
-   //}
-   //*time = 0;
-   //int time = 0;
    moveFront(vertexOrder);
    // Call DFS_VISIT based on the vertexOrder list
    while (index(vertexOrder)>-1) {
